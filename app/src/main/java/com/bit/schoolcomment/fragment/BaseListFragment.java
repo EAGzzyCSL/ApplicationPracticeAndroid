@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bit.schoolcomment.MyApplication;
@@ -18,7 +19,9 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
         implements SwipeRefreshLayout.OnRefreshListener {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
+    private EmptyAdapter mEmptyAdapter;
 
     private List<M> mList;
 
@@ -40,11 +43,11 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.base_list_swipeRefreshLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.base_list_recyclerView);
-        recyclerView.setLayoutManager(getLayoutManager());
-        recyclerView.setHasFixedSize(true);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.base_list_recyclerView);
+        mRecyclerView.setLayoutManager(getLayoutManager());
+        mRecyclerView.setHasFixedSize(true);
         mAdapter = getAdapter();
-        recyclerView.setAdapter(mAdapter);
+        mEmptyAdapter = new EmptyAdapter();
 
         beforePullNewData();
     }
@@ -66,12 +69,15 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
     protected abstract void pullNewData();
 
     protected void updateUI(List<M> list) {
+        mSwipeRefreshLayout.setRefreshing(false);
+
         if (list == null) {
-            Toast.makeText(getContext(), "网络错误", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+        } else if (list.size() == 0) {
+            mRecyclerView.setAdapter(mEmptyAdapter);
         } else {
-            this.mList = list;
-            mSwipeRefreshLayout.setRefreshing(false);
-            mAdapter.notifyDataSetChanged();
+            mList = list;
+            mRecyclerView.setAdapter(mAdapter);
         }
     }
 
@@ -97,6 +103,35 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
         public int getItemCount() {
             if (mList == null) return 0;
             else return mList.size();
+        }
+    }
+
+    private class EmptyAdapter extends RecyclerView.Adapter<EmptyViewHolder> {
+
+        @Override
+        public EmptyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.item_empty, parent, false);
+            return new EmptyViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(EmptyViewHolder holder, int position) {
+            holder.emptyTv.setText("empty");
+        }
+
+        @Override
+        public int getItemCount() {
+            return 1;
+        }
+    }
+
+    private static class EmptyViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView emptyTv;
+
+        public EmptyViewHolder(View itemView) {
+            super(itemView);
+            emptyTv = (TextView) itemView.findViewById(R.id.item_empty_text);
         }
     }
 }
