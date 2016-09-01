@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">校园美食评</string>
+    <string name="logout">注销</string>
 </resources>

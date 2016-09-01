@@ -6,25 +6,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.bit.schoolcomment.R;
-import com.bit.schoolcomment.model.DataModel;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.List;
-
-public class BaseListFragment extends BaseFragment {
+public class BaseListFragment extends BaseFragment
+        implements SwipeRefreshLayout.OnRefreshListener {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setEventBusOn(true);
         super.onCreate(savedInstanceState);
+        //pullNewData();
     }
 
     @Override
@@ -36,12 +32,32 @@ public class BaseListFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.base_list_swipeRefreshLayout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.base_list_recyclerView);
+        mRecyclerView.setHasFixedSize(true);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void helloEventBus(List<DataModel> list) {
-        String name = list.get(0).name;
-        Toast.makeText(getContext(), name, Toast.LENGTH_SHORT).show();
+    protected void setLayoutManager(RecyclerView.LayoutManager manager) {
+        mRecyclerView.setLayoutManager(manager);
+    }
+
+    protected void setAdapter(RecyclerView.Adapter adapter) {
+        mAdapter = adapter;
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    protected void pullNewData() {
+        mSwipeRefreshLayout.setRefreshing(true);
+    }
+
+    protected void updateUI() {
+        mSwipeRefreshLayout.setRefreshing(false);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRefresh() {
+        pullNewData();
     }
 }
