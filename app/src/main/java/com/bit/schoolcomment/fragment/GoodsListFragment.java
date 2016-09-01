@@ -1,6 +1,6 @@
 package com.bit.schoolcomment.fragment;
 
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +17,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
-public class ShopListFragment extends BaseListFragment<DataModel> {
+public class GoodsListFragment extends BaseListFragment<DataModel> {
 
     @Override
     protected RecyclerView.LayoutManager getLayoutManager() {
-        return new GridLayoutManager(getContext(), 2);
+        return new LinearLayoutManager(getContext());
     }
 
     @Override

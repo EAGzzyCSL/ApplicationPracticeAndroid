@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SlidingPaneLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.bit.schoolcomment.view.EdgeSlidingPaneLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_slidingPaneLayout"
     android:layout_width="match_parent"
@@ -13,31 +13,48 @@
         app:headerLayout="@layout/main_nav_header"
         app:menu="@menu/menu_main_nav" />
 
-    <LinearLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/main_toolbar"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <FrameLayout
-            android:id="@+id/main_frameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/main_toolbar"
+                style="@style/Toolbar"
+                app:layout_scrollFlags="scroll|enterAlways" />
 
-            <fragment
-                android:name="com.bit.schoolcomment.fragment.ShopListFragment"
+            <android.support.design.widget.TabLayout
+                android:id="@+id/main_tabLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-        </FrameLayout>
+        </android.support.design.widget.AppBarLayout>
 
-    </LinearLayout>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/main_viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-</android.support.v4.widget.SlidingPaneLayout>
+        </android.support.v4.view.ViewPager>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/main_btn_school"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_change_white_24dp"
+            app:fabSize="normal" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</com.bit.schoolcomment.view.EdgeSlidingPaneLayout>

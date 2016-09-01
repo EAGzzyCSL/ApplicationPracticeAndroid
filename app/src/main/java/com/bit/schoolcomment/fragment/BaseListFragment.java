@@ -41,7 +41,7 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
         super.onViewCreated(view, savedInstanceState);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.base_list_swipeRefreshLayout);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.base_list_recyclerView);
         mRecyclerView.setLayoutManager(getLayoutManager());
@@ -49,7 +49,14 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
         mAdapter = getAdapter();
         mEmptyAdapter = new EmptyAdapter();
 
-        beforePullNewData();
+        mSwipeRefreshLayout.post(new Runnable() {
+
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        pullNewData();
     }
 
     protected abstract RecyclerView.LayoutManager getLayoutManager();
@@ -58,11 +65,6 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
 
     @Override
     public void onRefresh() {
-        beforePullNewData();
-    }
-
-    private void beforePullNewData() {
-        mSwipeRefreshLayout.setRefreshing(true);
         pullNewData();
     }
 

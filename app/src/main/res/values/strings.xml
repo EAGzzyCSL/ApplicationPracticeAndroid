@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">校园美食评</string>
+    <string name="canteen">食堂/餐厅</string>
+    <string name="change_school">切换学校</string>
+    <string name="dishes">菜品</string>
     <string name="network_error">网络错误</string>
     <string name="logout">注销</string>
+    <string name="search">搜索</string>
 </resources>

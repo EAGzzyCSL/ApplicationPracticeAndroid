@@ -6,6 +6,7 @@ import android.view.animation.AnimationUtils;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.facebook.drawee.backends.pipeline.Fresco;
 
 public class MyApplication extends Application {
 
@@ -19,7 +20,8 @@ public class MyApplication extends Application {
         super.onCreate();
         sApplication = this;
         mRequestQueue = Volley.newRequestQueue(this);
-        mItemAnimation = AnimationUtils.loadAnimation(this, R.anim.item_bottom_in);
+        mItemAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_item_show);
+        Fresco.initialize(this);
     }
 
     public static MyApplication getDefault() {
