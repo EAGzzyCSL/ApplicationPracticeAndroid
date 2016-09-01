@@ -1,6 +1,6 @@
 package com.bit.schoolcomment.model;
 
-public class DataModel {
+public class DataModel extends BaseModel {
 
     public int id;
     public String name;

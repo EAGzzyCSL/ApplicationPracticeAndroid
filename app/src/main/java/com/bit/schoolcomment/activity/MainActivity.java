@@ -39,4 +39,10 @@ public class MainActivity extends BaseActivity {
         }
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        if (mSlidingPaneLayout.isOpen()) mSlidingPaneLayout.closePane();
+        else super.onBackPressed();
+    }
 }

@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 
 import org.greenrobot.eventbus.EventBus;
 
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment {
 
     private boolean mEventBusOn;
 

@@ -6,7 +6,7 @@ import android.view.MenuItem;
 
 import com.bit.schoolcomment.R;
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     protected void initToolbar(int id, String title) {
         Toolbar toolbar = (Toolbar) findViewById(id);
