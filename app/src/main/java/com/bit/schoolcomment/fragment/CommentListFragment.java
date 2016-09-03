@@ -19,7 +19,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
-public class ShopListFragment extends BaseListFragment<DataModel> {
+public class CommentListFragment extends BaseListFragment<DataModel> {
 
     @Override
     protected RecyclerView.LayoutManager getLayoutManager() {

@@ -17,15 +17,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <android.support.design.widget.AppBarLayout style="@style/AppBarLayout">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/main_toolbar"
                 style="@style/Toolbar"
-                app:layout_scrollFlags="scroll|enterAlways" />
+                app:layout_scrollFlags="scroll|snap" />
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/main_tabLayout"
