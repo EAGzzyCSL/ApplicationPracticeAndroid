@@ -1,5 +1,6 @@
 package com.bit.schoolcomment.fragment;
 
+import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
+import com.bit.schoolcomment.activity.ShopActivity;
 import com.bit.schoolcomment.model.DataModel;
 import com.bit.schoolcomment.util.PullUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -39,12 +41,15 @@ public class ShopListFragment extends BaseListFragment<DataModel> {
         updateUI(list);
     }
 
-    private class ShopListAdapter extends BaseListAdapter<ShopListViewHolder> {
+    private class ShopListAdapter extends BaseListAdapter<ShopListViewHolder>
+            implements View.OnClickListener {
 
         @Override
         public ShopListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.item_shop, parent, false);
-            return new ShopListViewHolder(view);
+            ShopListViewHolder holder = new ShopListViewHolder(view);
+            holder.itemView.setOnClickListener(this);
+            return holder;
         }
 
         @Override
@@ -52,6 +57,12 @@ public class ShopListFragment extends BaseListFragment<DataModel> {
             DataModel model = getModel(position);
             holder.imageDv.setImageURI("https://www.baidu.com/img/bd_logo1.png");
             holder.nameTv.setText(model.name);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getActivity(), ShopActivity.class);
+            startActivity(intent);
         }
     }
 
