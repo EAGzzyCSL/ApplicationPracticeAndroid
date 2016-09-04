@@ -33,7 +33,8 @@ public class ShopActivity extends BaseActivity
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         float fraction = 1 / (float) appBarLayout.getTotalScrollRange();
-        float scale = 1 - Math.abs(verticalOffset) * fraction;
-        mInfoView.setScaleY(scale);
+        float current = 1 - Math.abs(verticalOffset) * fraction;
+        mInfoView.setAlpha(current);
+        mInfoView.setScaleY(current);
     }
 }

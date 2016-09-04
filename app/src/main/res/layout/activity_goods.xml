@@ -19,11 +19,26 @@
             android:text="TextView"
             app:layout_scrollFlags="scroll" />
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/goods_viewPager"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="256dp"
-            app:layout_scrollFlags="scroll" />
+            android:layout_height="200dp"
+            app:layout_scrollFlags="scroll">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/goods_viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <RadioGroup
+                android:id="@+id/goods_radioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_gravity="bottom"
+                android:background="#55FFFFFF"
+                android:gravity="center"
+                android:orientation="horizontal" />
+
+        </FrameLayout>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -46,7 +61,7 @@
         android:visibility="gone" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/shop_btn_add"
+        android:id="@+id/goods_btn_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
