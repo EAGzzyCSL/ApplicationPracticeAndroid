@@ -12,4 +12,55 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout style="@style/InputWrapper">
+
+                <TextView
+                    style="@style/InputKey"
+                    android:text="姓名" />
+
+                <EditText
+                    style="@style/InputValue"
+                    android:hint="请填写姓名" />
+
+            </LinearLayout>
+
+            <include layout="@layout/layout_divider" />
+
+            <LinearLayout style="@style/InputWrapper">
+
+                <TextView
+                    style="@style/InputKey"
+                    android:text="评分" />
+
+                <RatingBar
+                    style="?android:attr/ratingBarStyleIndicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:isIndicator="false"
+                    android:stepSize="0.5" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <Button
+        android:id="@+id/add_comment_button"
+        style="@style/Button"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/add_comment" />
+
 </LinearLayout>

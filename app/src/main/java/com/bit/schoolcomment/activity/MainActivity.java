@@ -1,5 +1,6 @@
 package com.bit.schoolcomment.activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -8,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SlidingPaneLayout;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,35 +68,35 @@ public class MainActivity extends BaseActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        return false;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        SearchView searchView = (SearchView) menu.findItem(R.id.menu_main_search).getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return true;
-            }
-        });
+        switch (item.getItemId()) {
+            case R.id.menu_main_logout:
+                Intent intent = new Intent(this, UserHistoryActivity.class);
+                startActivity(intent);
+                break;
+        }
 
         return true;
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            mSlidingPaneLayout.openPane();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mSlidingPaneLayout.openPane();
+                break;
+
+            case R.id.menu_main_search:
+                Intent intent = new Intent(this, SearchActivity.class);
+                startActivity(intent);
+                break;
         }
+
         return true;
     }
 

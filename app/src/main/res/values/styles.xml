@@ -25,8 +25,6 @@
     <style name="Button">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">40dp</item>
-        <item name="android:layout_marginLeft">25dp</item>
-        <item name="android:layout_marginRight">25dp</item>
         <item name="android:layout_marginTop">20dp</item>
         <item name="android:background">@drawable/bg_button_round</item>
         <item name="android:textColor">#FFFFFF</item>
@@ -40,6 +38,29 @@
         <item name="android:layout_gravity">bottom|end</item>
         <item name="android:layout_marginBottom">16dp</item>
         <item name="android:layout_marginEnd">16dp</item>
+    </style>
+
+    <style name="InputWrapper">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="InputKey">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="InputValue">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginStart">30dp</item>
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
 </resources>

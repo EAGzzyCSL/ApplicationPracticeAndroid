@@ -1,8 +1,11 @@
 package com.bit.schoolcomment.activity;
 
+import android.view.View;
+
 import com.bit.schoolcomment.R;
 
-public class AddCommentActivity extends BaseActivity {
+public class AddCommentActivity extends BaseActivity
+        implements View.OnClickListener {
 
     @Override
     protected int getLayoutID() {
@@ -12,5 +15,13 @@ public class AddCommentActivity extends BaseActivity {
     @Override
     protected void initView() {
         initToolbar(R.id.add_comment_toolbar, "test");
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.add_comment_button:
+                break;
+        }
     }
 }
