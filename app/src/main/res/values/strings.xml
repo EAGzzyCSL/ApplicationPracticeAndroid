@@ -6,4 +6,17 @@
     <string name="network_error">网络错误</string>
     <string name="logout">注销</string>
     <string name="search">搜索</string>
+    <string name="username">用户名</string>
+    <string name="password">密码</string>
+    <string name="login">登陆</string>
+    <string name="go_register">还没有账号？立即注册！</string>
+    <string name="please_input_username">请填写用户名</string>
+    <string name="please_input_password">请填写密码</string>
+    <string name="please_input_password_again">请再次填写密码</string>
+    <string name="confirm_password">确认密码</string>
+    <string name="register">注册</string>
+    <string name="go_login">已有账号？立即登陆！</string>
+    <string name="please_login">请登录</string>
+    <string name="edit_sign">点击编辑个性签名...</string>
+    <string name="login_discover_more">登陆发现更多精彩~</string>
 </resources>

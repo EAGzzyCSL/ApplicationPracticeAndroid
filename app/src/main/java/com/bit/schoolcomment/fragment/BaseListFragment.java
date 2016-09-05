@@ -7,11 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bit.schoolcomment.MyApplication;
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.model.BaseModel;
+import com.bit.schoolcomment.util.ToastUtil;
 
 import java.util.List;
 
@@ -74,7 +74,7 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
         mSwipeRefreshLayout.setRefreshing(false);
 
         if (list == null) {
-            Toast.makeText(getContext(), getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+            ToastUtil.show(getString(R.string.network_error));
         } else if (list.size() == 0) {
             mRecyclerView.setAdapter(mEmptyAdapter);
         } else {

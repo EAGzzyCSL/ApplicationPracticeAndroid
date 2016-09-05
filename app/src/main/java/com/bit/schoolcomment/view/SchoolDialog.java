@@ -4,7 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -28,11 +28,12 @@ public class SchoolDialog extends Dialog {
         Toolbar toolbar = (Toolbar) findViewById(R.id.dialog_school_toolbar);
         toolbar.setTitle(getContext().getString(R.string.change_school));
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-    }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) onBackPressed();
-        return true;
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 }

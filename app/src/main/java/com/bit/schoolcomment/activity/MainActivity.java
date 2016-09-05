@@ -18,6 +18,7 @@ import android.view.View;
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.fragment.GoodsListFragment;
 import com.bit.schoolcomment.fragment.ShopListFragment;
+import com.bit.schoolcomment.util.DimenUtil;
 import com.bit.schoolcomment.view.SchoolDialog;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -35,7 +36,10 @@ public class MainActivity extends BaseActivity
 
     private void initView() {
         mSlidingPaneLayout = (SlidingPaneLayout) findViewById(R.id.main_slidingPaneLayout);
-        if (mSlidingPaneLayout != null) mSlidingPaneLayout.setParallaxDistance(600);
+        if (mSlidingPaneLayout != null) {
+            int distance = DimenUtil.Dp2Px(this, 300);
+            mSlidingPaneLayout.setParallaxDistance(distance);
+        }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.main_navigationView);
         if (navigationView != null) {

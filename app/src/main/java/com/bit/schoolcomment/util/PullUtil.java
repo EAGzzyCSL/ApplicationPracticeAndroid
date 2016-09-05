@@ -7,7 +7,7 @@ import org.greenrobot.eventbus.EventBus;
 
 public class PullUtil {
 
-    public static final String SEARCH_GAS_STATION = "http://apis.juhe.cn/oil/region";
+    private static final String SEARCH_GAS_STATION = "http://apis.juhe.cn/oil/region";
 
     private static volatile PullUtil sPullUtil;
 
@@ -20,6 +20,14 @@ public class PullUtil {
             }
         }
         return sPullUtil;
+    }
+
+    public void register() {
+
+    }
+
+    public void login() {
+
     }
 
     public void searchGasStation() {
