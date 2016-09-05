@@ -1,7 +1,6 @@
 package com.bit.schoolcomment.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
@@ -17,13 +16,12 @@ public class RegisterActivity extends BaseActivity
     private EditText mPassword2Et;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
-        initView();
+    protected int getLayoutID() {
+        return R.layout.activity_register;
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         mUserNameEt = (EditText) findViewById(R.id.register_username);
         mPasswordEt = (EditText) findViewById(R.id.register_password);
         mPassword2Et = (EditText) findViewById(R.id.register_password2);

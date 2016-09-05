@@ -25,10 +25,8 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
 
     private List<M> mList;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    {
         setEventBusOn(true);
-        super.onCreate(savedInstanceState);
     }
 
     @Override

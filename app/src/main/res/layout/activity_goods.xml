@@ -62,11 +62,7 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/goods_btn_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
+        style="@style/FAB"
         android:src="@drawable/ic_add_white_24dp"
         app:fabSize="normal" />
 

@@ -1,6 +1,5 @@
 package com.bit.schoolcomment.activity;
 
-import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.view.View;
 
@@ -13,13 +12,12 @@ public class ShopActivity extends BaseActivity
     private View mInfoView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shop);
-        initView();
+    protected int getLayoutID() {
+        return R.layout.activity_shop;
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.shop_appBarLayout);
         if (appBarLayout != null) appBarLayout.addOnOffsetChangedListener(this);
         initToolbar(R.id.shop_toolbar, "test");

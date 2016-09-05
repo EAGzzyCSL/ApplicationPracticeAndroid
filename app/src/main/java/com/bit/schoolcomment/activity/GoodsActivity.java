@@ -1,6 +1,6 @@
 package com.bit.schoolcomment.activity;
 
-import android.os.Bundle;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
@@ -12,13 +12,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.bit.schoolcomment.R;
-import com.bit.schoolcomment.util.DimenUtil;
+import com.bit.schoolcomment.util.DimensionUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.lang.ref.WeakReference;
 
 public class GoodsActivity extends BaseActivity
-        implements AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener {
+        implements AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener, View.OnClickListener {
 
     private static final int MSG_WHAT = 1;
     private static final int TIME_DELAY = 4000;
@@ -27,13 +27,6 @@ public class GoodsActivity extends BaseActivity
     private Handler mHandler;
     private SimpleDraweeView[] mImageDv;
     private RadioButton[] mRadioButton;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_goods);
-        initView();
-    }
 
     @Override
     protected void onResume() {
@@ -47,7 +40,13 @@ public class GoodsActivity extends BaseActivity
         mHandler.removeMessages(MSG_WHAT);
     }
 
-    private void initView() {
+    @Override
+    protected int getLayoutID() {
+        return R.layout.activity_goods;
+    }
+
+    @Override
+    protected void initView() {
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.goods_appBarLayout);
         if (appBarLayout != null) appBarLayout.addOnOffsetChangedListener(this);
         initToolbar(R.id.goods_toolbar, "test");
@@ -60,6 +59,9 @@ public class GoodsActivity extends BaseActivity
             viewPager.addOnPageChangeListener(this);
             mHandler = new ImageHandler(new WeakReference<>(viewPager));
         }
+
+        View addBt = findViewById(R.id.goods_btn_add);
+        if (addBt != null) addBt.setOnClickListener(this);
     }
 
     @Override
@@ -73,7 +75,6 @@ public class GoodsActivity extends BaseActivity
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
     }
 
     @Override
@@ -83,12 +84,21 @@ public class GoodsActivity extends BaseActivity
 
     @Override
     public void onPageScrollStateChanged(int state) {
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.goods_btn_add:
+                Intent intent = new Intent(this, AddCommentActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 
     private class ImagePagerAdapter extends PagerAdapter {
 
-        private final int DIMEN = DimenUtil.Dp2Px(GoodsActivity.this, 10);
+        private final int DIMEN = DimensionUtil.Dp2Px(10);
 
         public ImagePagerAdapter() {
             mImageDv = new SimpleDraweeView[3];

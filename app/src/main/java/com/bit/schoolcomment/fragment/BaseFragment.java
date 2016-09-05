@@ -9,6 +9,10 @@ public abstract class BaseFragment extends Fragment {
 
     private boolean mEventBusOn;
 
+    protected void setEventBusOn(boolean eventBusOn) {
+        mEventBusOn = eventBusOn;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,9 +23,5 @@ public abstract class BaseFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         if (mEventBusOn) EventBus.getDefault().unregister(this);
-    }
-
-    protected void setEventBusOn(boolean eventBusOn) {
-        mEventBusOn = eventBusOn;
     }
 }

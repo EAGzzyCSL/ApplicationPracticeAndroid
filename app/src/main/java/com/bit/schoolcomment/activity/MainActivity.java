@@ -1,7 +1,6 @@
 package com.bit.schoolcomment.activity;
 
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -18,7 +17,7 @@ import android.view.View;
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.fragment.GoodsListFragment;
 import com.bit.schoolcomment.fragment.ShopListFragment;
-import com.bit.schoolcomment.util.DimenUtil;
+import com.bit.schoolcomment.util.DimensionUtil;
 import com.bit.schoolcomment.view.SchoolDialog;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -28,16 +27,15 @@ public class MainActivity extends BaseActivity
     private SlidingPaneLayout mSlidingPaneLayout;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initView();
+    protected int getLayoutID() {
+        return R.layout.activity_main;
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         mSlidingPaneLayout = (SlidingPaneLayout) findViewById(R.id.main_slidingPaneLayout);
         if (mSlidingPaneLayout != null) {
-            int distance = DimenUtil.Dp2Px(this, 300);
+            int distance = DimensionUtil.Dp2Px(300);
             mSlidingPaneLayout.setParallaxDistance(distance);
         }
 

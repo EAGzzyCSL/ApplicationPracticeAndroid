@@ -1,7 +1,6 @@
 package com.bit.schoolcomment.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
@@ -16,13 +15,12 @@ public class LoginActivity extends BaseActivity
     private EditText mPasswordEt;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        initView();
+    protected int getLayoutID() {
+        return R.layout.activity_login;
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         mUserNameEt = (EditText) findViewById(R.id.login_username);
         mPasswordEt = (EditText) findViewById(R.id.login_password);
         View loginBt = findViewById(R.id.login_button);
