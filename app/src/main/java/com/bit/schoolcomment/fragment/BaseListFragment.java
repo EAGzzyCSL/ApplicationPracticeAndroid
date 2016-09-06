@@ -25,8 +25,9 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
 
     private List<M> mList;
 
-    {
-        setEventBusOn(true);
+    @Override
+    protected boolean isEventBusOn() {
+        return true;
     }
 
     @Override

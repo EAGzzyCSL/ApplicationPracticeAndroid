@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.event.LoginEvent;
-import com.bit.schoolcomment.fragment.GoodsListFragment;
-import com.bit.schoolcomment.fragment.ShopListFragment;
+import com.bit.schoolcomment.fragment.HotGoodsListFragment;
+import com.bit.schoolcomment.fragment.HotShopListFragment;
 import com.bit.schoolcomment.util.DimensionUtil;
 import com.bit.schoolcomment.util.UserUtil;
 import com.bit.schoolcomment.view.SchoolDialog;
@@ -159,7 +159,7 @@ public class MainActivity extends BaseActivity
     private class PagerAdapter extends FragmentPagerAdapter {
 
         private final String[] TITLE = {getString(R.string.canteen), getString(R.string.dishes)};
-        private final Fragment[] FRAGMENTS = {new ShopListFragment(), new GoodsListFragment()};
+        private final Fragment[] FRAGMENTS = {new HotShopListFragment(), new HotGoodsListFragment()};
 
         public PagerAdapter(FragmentManager fm) {
             super(fm);

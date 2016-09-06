@@ -7,21 +7,17 @@ import org.greenrobot.eventbus.EventBus;
 
 public abstract class BaseFragment extends Fragment {
 
-    private boolean mEventBusOn;
-
-    protected void setEventBusOn(boolean eventBusOn) {
-        mEventBusOn = eventBusOn;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (mEventBusOn) EventBus.getDefault().register(this);
+        if (isEventBusOn()) EventBus.getDefault().register(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mEventBusOn) EventBus.getDefault().unregister(this);
+        if (isEventBusOn()) EventBus.getDefault().unregister(this);
     }
+
+    protected abstract boolean isEventBusOn();
 }

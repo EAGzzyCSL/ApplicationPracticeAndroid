@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.fragment.CommentListFragment;
-import com.bit.schoolcomment.fragment.GoodsListFragment;
 
 public class UserHistoryActivity extends BaseActivity {
 
@@ -37,7 +36,7 @@ public class UserHistoryActivity extends BaseActivity {
     private class PagerAdapter extends FragmentPagerAdapter {
 
         private final String[] TITLE = {"我的收藏", "我的评论", "我赞过的评论"};
-        private final Fragment[] FRAGMENTS = {new GoodsListFragment(), new CommentListFragment(), new CommentListFragment()};
+        private final Fragment[] FRAGMENTS = {new CommentListFragment(), new CommentListFragment(), new CommentListFragment()};
 
         public PagerAdapter(FragmentManager fm) {
             super(fm);

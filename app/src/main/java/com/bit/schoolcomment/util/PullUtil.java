@@ -1,8 +1,11 @@
 package com.bit.schoolcomment.util;
 
+import com.bit.schoolcomment.event.HotGoodsEvent;
+import com.bit.schoolcomment.event.HotShopEvent;
 import com.bit.schoolcomment.event.LoginEvent;
 import com.bit.schoolcomment.event.RegisterEvent;
-import com.bit.schoolcomment.model.RawModel;
+import com.bit.schoolcomment.model.GoodsListModel;
+import com.bit.schoolcomment.model.ShopListModel;
 import com.bit.schoolcomment.model.UserModel;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -15,7 +18,8 @@ public class PullUtil {
     private static final String BASE_URL = "http://123.206.84.137/ApplicationPracticeWeb/php/receive.php?PostType=";
     private static final String REGISTER = BASE_URL + "Register";
     private static final String LOGIN = BASE_URL + "Login";
-    private static final String SEARCH_GAS_STATION = "http://apis.juhe.cn/oil/region";
+    private static final String GET_HOT_SHOP = BASE_URL + "Get_hotshop";
+    private static final String GET_HOT_GOODS = BASE_URL + "Get_hotgoods";
 
     private static volatile PullUtil sPullUtil;
 
@@ -83,24 +87,29 @@ public class PullUtil {
         request.doPost();
     }
 
-    public void searchGasStation() {
-        PullRequest request = new PullRequest(SEARCH_GAS_STATION);
-        request.setParams("city", "北京");
-        request.setParams("key", "e14ab7d59ae6bd01598ff061f9411b40");
+    public void getHotShop(int schoolId) {
+        PullRequest request = new PullRequest(GET_HOT_SHOP);
+        request.setParams("school_ID", String.valueOf(schoolId));
         request.setResponseListener(new ResponseListener() {
 
             @Override
             public void getResult(String result) {
-                System.out.println(result);
-                Gson gson = new Gson();
-                RawModel model = gson.fromJson(result, RawModel.class);
-                EventBus.getDefault().post(model.result.data);
+                ShopListModel model = new Gson().fromJson(result, ShopListModel.class);
+                EventBus.getDefault().post(new HotShopEvent(model));
             }
+        });
+        request.doPost();
+    }
+
+    public void getHotGoods(int schoolId) {
+        PullRequest request = new PullRequest(GET_HOT_GOODS);
+        request.setParams("school_ID", String.valueOf(schoolId));
+        request.setResponseListener(new ResponseListener() {
 
             @Override
-            public void getError() {
-                System.out.println("error");
-                EventBus.getDefault().post(null);
+            public void getResult(String result) {
+                GoodsListModel model = new Gson().fromJson(result, GoodsListModel.class);
+                EventBus.getDefault().post(new HotGoodsEvent(model));
             }
         });
         request.doPost();

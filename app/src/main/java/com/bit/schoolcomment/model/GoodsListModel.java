@@ -2,7 +2,7 @@ package com.bit.schoolcomment.model;
 
 import java.util.List;
 
-public class ResultModel {
+public class GoodsListModel {
 
-    public List<DataModel> data;
+    public List<GoodsModel> data;
 }

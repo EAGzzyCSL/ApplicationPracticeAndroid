@@ -10,16 +10,10 @@ import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.activity.GoodsActivity;
-import com.bit.schoolcomment.model.DataModel;
-import com.bit.schoolcomment.util.PullUtil;
+import com.bit.schoolcomment.model.GoodsModel;
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.List;
-
-public class GoodsListFragment extends BaseListFragment<DataModel> {
+public abstract class GoodsListFragment extends BaseListFragment<GoodsModel> {
 
     @Override
     protected RecyclerView.LayoutManager getLayoutManager() {
@@ -29,16 +23,6 @@ public class GoodsListFragment extends BaseListFragment<DataModel> {
     @Override
     protected RecyclerView.Adapter getAdapter() {
         return new ShopListAdapter();
-    }
-
-    @Override
-    protected void pullNewData() {
-        PullUtil.getInstance().searchGasStation();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void helloEventBus(List<DataModel> list) {
-        updateUI(list);
     }
 
     private class ShopListAdapter extends BaseListAdapter<GoodsViewHolder>
@@ -54,7 +38,7 @@ public class GoodsListFragment extends BaseListFragment<DataModel> {
 
         @Override
         public void onBindViewHolder(GoodsViewHolder holder, int position) {
-            DataModel model = getModel(position);
+            GoodsModel model = getModel(position);
             holder.imageDv.setImageURI("https://www.baidu.com/img/bd_logo1.png");
             holder.nameTv.setText(model.name);
         }
