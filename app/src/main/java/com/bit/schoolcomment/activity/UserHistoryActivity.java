@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.bit.schoolcomment.R;
-import com.bit.schoolcomment.fragment.CommentListFragment;
+import com.bit.schoolcomment.fragment.comment.CommentListFragment;
 
 public class UserHistoryActivity extends BaseActivity {
 

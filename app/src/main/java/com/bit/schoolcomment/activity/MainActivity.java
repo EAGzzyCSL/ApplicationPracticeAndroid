@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.event.LoginEvent;
-import com.bit.schoolcomment.fragment.HotGoodsListFragment;
-import com.bit.schoolcomment.fragment.HotShopListFragment;
+import com.bit.schoolcomment.fragment.goods.HotGoodsListFragment;
+import com.bit.schoolcomment.fragment.shop.HotShopListFragment;
 import com.bit.schoolcomment.util.DimensionUtil;
 import com.bit.schoolcomment.util.UserUtil;
 import com.bit.schoolcomment.view.SchoolDialog;

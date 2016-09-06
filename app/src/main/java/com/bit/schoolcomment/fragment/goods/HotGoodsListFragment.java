@@ -1,6 +1,6 @@
-package com.bit.schoolcomment.fragment;
+package com.bit.schoolcomment.fragment.goods;
 
-import com.bit.schoolcomment.event.HotGoodsEvent;
+import com.bit.schoolcomment.event.goods.HotGoodsEvent;
 import com.bit.schoolcomment.util.PullUtil;
 
 import org.greenrobot.eventbus.Subscribe;

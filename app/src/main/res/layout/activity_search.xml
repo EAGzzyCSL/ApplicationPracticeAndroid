@@ -38,7 +38,7 @@
 
         <fragment
             android:id="@+id/search_fragment"
-            android:name="com.bit.schoolcomment.fragment.GoodsListFragment"
+            android:name="com.bit.schoolcomment.fragment.goods.GoodsListFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

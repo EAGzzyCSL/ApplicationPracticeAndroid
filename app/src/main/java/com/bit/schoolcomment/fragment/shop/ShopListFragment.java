@@ -1,4 +1,4 @@
-package com.bit.schoolcomment.fragment;
+package com.bit.schoolcomment.fragment.shop;
 
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,15 +10,11 @@ import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.activity.ShopActivity;
+import com.bit.schoolcomment.fragment.BaseListFragment;
 import com.bit.schoolcomment.model.ShopModel;
 import com.facebook.drawee.view.SimpleDraweeView;
 
-public class CommentListFragment extends BaseListFragment<ShopModel> {
-
-    @Override
-    protected boolean isEventBusOn() {
-        return false;
-    }
+public abstract class ShopListFragment extends BaseListFragment<ShopModel> {
 
     @Override
     protected RecyclerView.LayoutManager getLayoutManager() {
@@ -28,11 +24,6 @@ public class CommentListFragment extends BaseListFragment<ShopModel> {
     @Override
     protected RecyclerView.Adapter getAdapter() {
         return new ShopListAdapter();
-    }
-
-    @Override
-    protected void pullNewData() {
-        //PullUtil.getInstance().searchGasStation();
     }
 
     private class ShopListAdapter extends BaseListAdapter<ShopViewHolder>
@@ -48,6 +39,9 @@ public class CommentListFragment extends BaseListFragment<ShopModel> {
 
         @Override
         public void onBindViewHolder(ShopViewHolder holder, int position) {
+            ShopModel model = getModel(position);
+            holder.imageDv.setImageURI("https://www.baidu.com/img/bd_logo1.png");
+            holder.nameTv.setText(model.name);
         }
 
         @Override

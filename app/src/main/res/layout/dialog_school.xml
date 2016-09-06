@@ -18,7 +18,7 @@
 
         <fragment
             android:id="@+id/dialog_school_fragment"
-            android:name="com.bit.schoolcomment.fragment.GoodsListFragment"
+            android:name="com.bit.schoolcomment.fragment.SchoolListFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

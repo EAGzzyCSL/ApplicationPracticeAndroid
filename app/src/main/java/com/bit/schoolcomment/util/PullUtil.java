@@ -1,11 +1,13 @@
 package com.bit.schoolcomment.util;
 
-import com.bit.schoolcomment.event.HotGoodsEvent;
-import com.bit.schoolcomment.event.HotShopEvent;
+import com.bit.schoolcomment.event.goods.HotGoodsEvent;
+import com.bit.schoolcomment.event.shop.HotShopEvent;
 import com.bit.schoolcomment.event.LoginEvent;
 import com.bit.schoolcomment.event.RegisterEvent;
-import com.bit.schoolcomment.model.GoodsListModel;
-import com.bit.schoolcomment.model.ShopListModel;
+import com.bit.schoolcomment.event.SchoolEvent;
+import com.bit.schoolcomment.model.list.GoodsListModel;
+import com.bit.schoolcomment.model.list.SchoolListModel;
+import com.bit.schoolcomment.model.list.ShopListModel;
 import com.bit.schoolcomment.model.UserModel;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -18,6 +20,7 @@ public class PullUtil {
     private static final String BASE_URL = "http://123.206.84.137/ApplicationPracticeWeb/php/receive.php?PostType=";
     private static final String REGISTER = BASE_URL + "Register";
     private static final String LOGIN = BASE_URL + "Login";
+    private static final String GET_SCHOOL = BASE_URL + "Get_school";
     private static final String GET_HOT_SHOP = BASE_URL + "Get_hotshop";
     private static final String GET_HOT_GOODS = BASE_URL + "Get_hotgoods";
 
@@ -82,6 +85,19 @@ public class PullUtil {
                 if (userModel != null) {
                     EventBus.getDefault().post(new LoginEvent(userModel));
                 }
+            }
+        });
+        request.doPost();
+    }
+
+    public void getSchool() {
+        PullRequest request = new PullRequest(GET_SCHOOL);
+        request.setResponseListener(new ResponseListener() {
+
+            @Override
+            public void getResult(String result) {
+                SchoolListModel model = new Gson().fromJson(result, SchoolListModel.class);
+                EventBus.getDefault().post(new SchoolEvent(model));
             }
         });
         request.doPost();

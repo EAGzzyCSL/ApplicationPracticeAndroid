@@ -1,6 +1,6 @@
-package com.bit.schoolcomment.event;
+package com.bit.schoolcomment.event.shop;
 
-import com.bit.schoolcomment.model.ShopListModel;
+import com.bit.schoolcomment.model.list.ShopListModel;
 
 public class HotShopEvent {
 
