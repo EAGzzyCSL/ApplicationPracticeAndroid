@@ -5,7 +5,13 @@ import android.view.Menu;
 
 import com.bit.schoolcomment.R;
 
-public class SearchActivity extends BaseActivity implements SearchView.OnQueryTextListener {
+public class SearchActivity extends BaseActivity
+        implements SearchView.OnQueryTextListener {
+
+    @Override
+    protected boolean isEventBusOn() {
+        return false;
+    }
 
     @Override
     protected int getLayoutID() {

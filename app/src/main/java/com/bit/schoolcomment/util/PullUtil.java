@@ -1,12 +1,20 @@
 package com.bit.schoolcomment.util;
 
+import com.bit.schoolcomment.event.LoginEvent;
+import com.bit.schoolcomment.event.RegisterEvent;
 import com.bit.schoolcomment.model.RawModel;
+import com.bit.schoolcomment.model.UserModel;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.greenrobot.eventbus.EventBus;
 
 public class PullUtil {
 
+    private static final String BASE_URL = "http://123.206.84.137/ApplicationPracticeWeb/php/receive.php?PostType=";
+    private static final String REGISTER = BASE_URL + "Register";
+    private static final String LOGIN = BASE_URL + "Login";
     private static final String SEARCH_GAS_STATION = "http://apis.juhe.cn/oil/region";
 
     private static volatile PullUtil sPullUtil;
@@ -22,19 +30,64 @@ public class PullUtil {
         return sPullUtil;
     }
 
-    public void register() {
-
+    private boolean judgeCode(String result) {
+        JsonObject jsonObject = new JsonParser().parse(result).getAsJsonObject();
+        if (jsonObject.get("code").getAsInt() == 1) {
+            return true;
+        } else {
+            ToastUtil.show(jsonObject.get("msg").getAsString());
+            return false;
+        }
     }
 
-    public void login() {
+    private Object judgeCodeAndGetData(String result, Class clazz) {
+        JsonObject jsonObject = new JsonParser().parse(result).getAsJsonObject();
+        if (jsonObject.get("code").getAsInt() == 1) {
+            return new Gson().fromJson(jsonObject.get("data"), clazz);
+        } else {
+            ToastUtil.show(jsonObject.get("msg").getAsString());
+            return null;
+        }
+    }
 
+    public void register(String name, String password) {
+        PullRequest request = new PullRequest(REGISTER);
+        request.setParams("name", name);
+        request.setParams("password", password);
+        request.setResponseListener(new ResponseListener() {
+
+            @Override
+            public void getResult(String result) {
+                if (judgeCode(result)) {
+                    EventBus.getDefault().post(new RegisterEvent());
+                }
+            }
+        });
+        request.doPost();
+    }
+
+    public void login(String name, String password) {
+        PullRequest request = new PullRequest(LOGIN);
+        request.setParams("name", name);
+        request.setParams("password", password);
+        request.setResponseListener(new ResponseListener() {
+
+            @Override
+            public void getResult(String result) {
+                UserModel userModel = (UserModel) judgeCodeAndGetData(result, UserModel.class);
+                if (userModel != null) {
+                    EventBus.getDefault().post(new LoginEvent(userModel));
+                }
+            }
+        });
+        request.doPost();
     }
 
     public void searchGasStation() {
         PullRequest request = new PullRequest(SEARCH_GAS_STATION);
         request.setParams("city", "北京");
         request.setParams("key", "e14ab7d59ae6bd01598ff061f9411b40");
-        request.setResponseListener(new PullRequest.ResponseListener() {
+        request.setResponseListener(new ResponseListener() {
 
             @Override
             public void getResult(String result) {

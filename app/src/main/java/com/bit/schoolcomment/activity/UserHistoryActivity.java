@@ -13,6 +13,11 @@ import com.bit.schoolcomment.fragment.GoodsListFragment;
 public class UserHistoryActivity extends BaseActivity {
 
     @Override
+    protected boolean isEventBusOn() {
+        return false;
+    }
+
+    @Override
     protected int getLayoutID() {
         return R.layout.activity_user_history;
     }

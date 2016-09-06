@@ -12,6 +12,11 @@ public class ShopActivity extends BaseActivity
     private View mInfoView;
 
     @Override
+    protected boolean isEventBusOn() {
+        return false;
+    }
+
+    @Override
     protected int getLayoutID() {
         return R.layout.activity_shop;
     }

@@ -8,6 +8,11 @@ public class AddCommentActivity extends BaseActivity
         implements View.OnClickListener {
 
     @Override
+    protected boolean isEventBusOn() {
+        return false;
+    }
+
+    @Override
     protected int getLayoutID() {
         return R.layout.activity_add_comment;
     }

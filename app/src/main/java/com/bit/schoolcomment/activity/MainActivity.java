@@ -13,18 +13,32 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
+import com.bit.schoolcomment.event.LoginEvent;
 import com.bit.schoolcomment.fragment.GoodsListFragment;
 import com.bit.schoolcomment.fragment.ShopListFragment;
 import com.bit.schoolcomment.util.DimensionUtil;
+import com.bit.schoolcomment.util.UserUtil;
 import com.bit.schoolcomment.view.SchoolDialog;
 import com.facebook.drawee.view.SimpleDraweeView;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private SlidingPaneLayout mSlidingPaneLayout;
+    private SimpleDraweeView mAvatarDv;
+    private TextView mNameTv;
+    private TextView mSignTv;
+
+    @Override
+    protected boolean isEventBusOn() {
+        return true;
+    }
 
     @Override
     protected int getLayoutID() {
@@ -42,10 +56,12 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.main_navigationView);
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
-            View nav_header = navigationView.getHeaderView(0);
-            SimpleDraweeView avatarDv = (SimpleDraweeView) nav_header.findViewById(R.id.main_user_avatar);
-            Uri uri = Uri.parse("res://" + getPackageName() + "/" + R.drawable.ic_avatar_default);
-            avatarDv.setImageURI(uri);
+            View navHeader = navigationView.getHeaderView(0);
+            navHeader.findViewById(R.id.main_user_wrapper).setOnClickListener(this);
+            mAvatarDv = (SimpleDraweeView) navHeader.findViewById(R.id.main_user_avatar);
+            mNameTv = (TextView) navHeader.findViewById(R.id.main_user_name);
+            mSignTv = (TextView) navHeader.findViewById(R.id.main_user_sign);
+            updateNavHeader();
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
@@ -64,6 +80,17 @@ public class MainActivity extends BaseActivity
 
         View schoolBtn = findViewById(R.id.main_btn_school);
         if (schoolBtn != null) schoolBtn.setOnClickListener(this);
+    }
+
+    private void updateNavHeader() {
+        Uri uri = Uri.parse("res://" + getPackageName() + "/" + R.drawable.ic_avatar_default);
+        mAvatarDv.setImageURI(uri);
+        if (UserUtil.isLogin()) {
+            mNameTv.setText(UserUtil.getName());
+        } else {
+            mNameTv.setText(getString(R.string.please_login));
+            mSignTv.setText(getString(R.string.login_discover_more));
+        }
     }
 
     @Override
@@ -107,6 +134,13 @@ public class MainActivity extends BaseActivity
                 SchoolDialog dialog = new SchoolDialog(this);
                 dialog.show();
                 break;
+
+            case R.id.main_user_wrapper:
+                if (!UserUtil.isLogin()) {
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                }
+                break;
         }
     }
 
@@ -114,6 +148,12 @@ public class MainActivity extends BaseActivity
     public void onBackPressed() {
         if (mSlidingPaneLayout.isOpen()) mSlidingPaneLayout.closePane();
         else super.onBackPressed();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleLogin(LoginEvent event) {
+        UserUtil.setModel(event.userModel);
+        updateNavHeader();
     }
 
     private class PagerAdapter extends FragmentPagerAdapter {

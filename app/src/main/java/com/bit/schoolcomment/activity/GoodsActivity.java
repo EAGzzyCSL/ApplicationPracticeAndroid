@@ -41,6 +41,11 @@ public class GoodsActivity extends BaseActivity
     }
 
     @Override
+    protected boolean isEventBusOn() {
+        return false;
+    }
+
+    @Override
     protected int getLayoutID() {
         return R.layout.activity_goods;
     }

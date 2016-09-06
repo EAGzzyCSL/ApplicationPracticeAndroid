@@ -11,16 +11,10 @@ import org.greenrobot.eventbus.EventBus;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private boolean mEventBusOn;
-
-    protected void setEventBusOn(boolean eventBusOn) {
-        mEventBusOn = eventBusOn;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (mEventBusOn) EventBus.getDefault().register(this);
+        if (isEventBusOn()) EventBus.getDefault().register(this);
         setContentView(getLayoutID());
         initView();
     }
@@ -28,8 +22,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mEventBusOn) EventBus.getDefault().unregister(this);
+        if (isEventBusOn()) EventBus.getDefault().unregister(this);
     }
+
+    protected abstract boolean isEventBusOn();
 
     protected abstract int getLayoutID();
 

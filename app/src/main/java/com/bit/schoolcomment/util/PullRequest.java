@@ -5,6 +5,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bit.schoolcomment.MyApplication;
+import com.bit.schoolcomment.R;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +33,7 @@ public class PullRequest {
 
                     @Override
                     public void onResponse(String response) {
+                        System.out.println(response);
                         listener.getResult(response);
                     }
                 },
@@ -56,10 +58,13 @@ public class PullRequest {
     public void setResponseListener(ResponseListener listener) {
         this.listener = listener;
     }
+}
 
-    public interface ResponseListener {
-        void getResult(String result);
+abstract class ResponseListener {
 
-        void getError();
+    public abstract void getResult(String result);
+
+    public void getError() {
+        ToastUtil.show(MyApplication.getDefault().getString(R.string.network_error));
     }
 }
