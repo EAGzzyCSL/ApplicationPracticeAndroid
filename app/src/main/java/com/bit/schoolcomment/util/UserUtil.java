@@ -18,6 +18,14 @@ public class UserUtil {
         sUserModel = null;
     }
 
+    public static int getId() {
+        return sUserModel.ID;
+    }
+
+    public static String getToken() {
+        return sUserModel.token;
+    }
+
     public static String getName() {
         return sUserModel.name;
     }

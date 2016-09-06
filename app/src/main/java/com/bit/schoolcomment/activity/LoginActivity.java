@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.event.LoginEvent;
+import com.bit.schoolcomment.util.PreferenceUtil;
 import com.bit.schoolcomment.util.PullUtil;
 import com.bit.schoolcomment.util.ToastUtil;
 
@@ -63,6 +64,8 @@ public class LoginActivity extends BaseActivity
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleLogin(LoginEvent event) {
+        PreferenceUtil.putInt("userId", event.userModel.ID);
+        PreferenceUtil.putString("token", event.userModel.token);
         finish();
     }
 }

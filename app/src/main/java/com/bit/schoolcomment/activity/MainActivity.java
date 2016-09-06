@@ -24,6 +24,7 @@ import com.bit.schoolcomment.util.UserUtil;
 import com.bit.schoolcomment.view.SchoolDialog;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -150,8 +151,9 @@ public class MainActivity extends BaseActivity
         else super.onBackPressed();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void handleLogin(LoginEvent event) {
+        EventBus.getDefault().removeStickyEvent(event);
         UserUtil.setModel(event.userModel);
         updateNavHeader();
     }

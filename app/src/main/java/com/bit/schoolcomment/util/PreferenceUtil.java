@@ -13,6 +13,10 @@ public class PreferenceUtil {
         sPreferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getDefault());
     }
 
+    public static boolean contains(String key) {
+        return sPreferences.contains(key);
+    }
+
     public static int getInt(String key) {
         return sPreferences.getInt(key, 0);
     }
