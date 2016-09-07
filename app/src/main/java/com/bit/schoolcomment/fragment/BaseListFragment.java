@@ -47,13 +47,7 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mAdapter);
 
-        mSwipeRefreshLayout.post(new Runnable() {
-
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(true);
-            }
-        });
+        setRefreshing(true);
         pullNewData();
     }
 
@@ -79,7 +73,17 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
             mAdapter.notifyDataSetChanged();
         }
 
-        mSwipeRefreshLayout.setRefreshing(false);
+        setRefreshing(false);
+    }
+
+    protected void setRefreshing(final boolean refreshing) {
+        mSwipeRefreshLayout.post(new Runnable() {
+
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(refreshing);
+            }
+        });
     }
 
     protected M getModel(int location) {

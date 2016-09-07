@@ -26,4 +26,5 @@
     <string name="sure">确定</string>
     <string name="cancel">取消</string>
     <string name="confirm_logout">确定要注销吗？</string>
+    <string name="please_input_keyword">请输入关键字</string>
 </resources>

@@ -5,9 +5,11 @@ import com.bit.schoolcomment.event.LogoutEvent;
 import com.bit.schoolcomment.event.RegisterEvent;
 import com.bit.schoolcomment.event.comment.GoodsCommentListEvent;
 import com.bit.schoolcomment.event.goods.HotGoodsListEvent;
+import com.bit.schoolcomment.event.goods.SearchGoodsListEvent;
 import com.bit.schoolcomment.event.goods.ShopGoodsListEvent;
 import com.bit.schoolcomment.event.school.SchoolListEvent;
 import com.bit.schoolcomment.event.shop.HotShopListEvent;
+import com.bit.schoolcomment.event.shop.SearchShopListEvent;
 import com.bit.schoolcomment.model.UserModel;
 import com.bit.schoolcomment.model.list.CommentListModel;
 import com.bit.schoolcomment.model.list.GoodsListModel;
@@ -26,6 +28,8 @@ public class PullUtil {
     private static final String LOGIN = BASE_URL + "Login";
     private static final String LOGOUT = BASE_URL + "logout";
     private static final String CHECK_TOKEN = BASE_URL + "Check_token";
+    private static final String SEARCH_SHOP = BASE_URL + "Shop_search";
+    private static final String SEARCH_GOODS = BASE_URL + "Goods_search";
     private static final String GET_SCHOOL = BASE_URL + "Get_school";
     private static final String GET_HOT_SHOP = BASE_URL + "Get_hotshop";
     private static final String GET_HOT_GOODS = BASE_URL + "Get_hotgoods";
@@ -118,6 +122,36 @@ public class PullUtil {
                 JsonObject jsonObject = new JsonParser().parse(result).getAsJsonObject();
                 UserModel model = new Gson().fromJson(jsonObject.get("data"), UserModel.class);
                 if (model != null) EventBus.getDefault().postSticky(new LoginEvent(model));
+            }
+        });
+        request.doPost();
+    }
+
+    public void searchShop(String keyword) {
+        PullRequest request = new PullRequest(SEARCH_SHOP);
+        if (DataUtil.isLogin()) addIdAndToken(request);
+        request.setParams("keyword", keyword);
+        request.setResponseListener(new ResponseListener() {
+
+            @Override
+            public void getResult(String result) {
+                ShopListModel model = new Gson().fromJson(result, ShopListModel.class);
+                EventBus.getDefault().post(new SearchShopListEvent(model));
+            }
+        });
+        request.doPost();
+    }
+
+    public void searchGoods(String keyword) {
+        PullRequest request = new PullRequest(SEARCH_GOODS);
+        if (DataUtil.isLogin()) addIdAndToken(request);
+        request.setParams("keyword", keyword);
+        request.setResponseListener(new ResponseListener() {
+
+            @Override
+            public void getResult(String result) {
+                GoodsListModel model = new Gson().fromJson(result, GoodsListModel.class);
+                EventBus.getDefault().post(new SearchGoodsListEvent(model));
             }
         });
         request.doPost();
