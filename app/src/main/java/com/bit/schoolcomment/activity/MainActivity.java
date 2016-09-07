@@ -1,5 +1,6 @@
 package com.bit.schoolcomment.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.NavigationView;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SlidingPaneLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,11 +19,14 @@ import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.event.LoginEvent;
+import com.bit.schoolcomment.event.LogoutEvent;
 import com.bit.schoolcomment.event.school.SchoolSelectEvent;
 import com.bit.schoolcomment.fragment.goods.HotGoodsListFragment;
 import com.bit.schoolcomment.fragment.shop.HotShopListFragment;
 import com.bit.schoolcomment.util.DataUtil;
 import com.bit.schoolcomment.util.DimensionUtil;
+import com.bit.schoolcomment.util.PreferenceUtil;
+import com.bit.schoolcomment.util.PullUtil;
 import com.bit.schoolcomment.view.SchoolDialog;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -100,8 +105,18 @@ public class MainActivity extends BaseActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_main_logout:
-                Intent intent = new Intent(this, UserHistoryActivity.class);
-                startActivity(intent);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                dialog.setTitle(getString(R.string.hint));
+                dialog.setMessage(getString(R.string.confirm_logout));
+                dialog.setPositiveButton(getString(R.string.sure), new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        PullUtil.getInstance().logout();
+                    }
+                });
+                dialog.setNegativeButton(getString(R.string.cancel), null);
+                dialog.show();
                 break;
         }
 
@@ -157,6 +172,14 @@ public class MainActivity extends BaseActivity
     public void handleLogin(LoginEvent event) {
         EventBus.getDefault().removeStickyEvent(event);
         DataUtil.setUserModel(event.userModel);
+        updateNavHeader();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleLogout(LogoutEvent event) {
+        DataUtil.clearUserModel();
+        PreferenceUtil.remove("userId");
+        PreferenceUtil.remove("token");
         updateNavHeader();
     }
 

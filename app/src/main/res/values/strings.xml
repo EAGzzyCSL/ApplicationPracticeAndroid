@@ -22,4 +22,8 @@
     <string name="add_comment">发表评论</string>
     <string name="not_same_password">两次密码填写不一致</string>
     <string name="no_content">暂无内容</string>
+    <string name="hint">提示</string>
+    <string name="sure">确定</string>
+    <string name="cancel">取消</string>
+    <string name="confirm_logout">确定要注销吗？</string>
 </resources>

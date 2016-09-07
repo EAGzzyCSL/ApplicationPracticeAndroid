@@ -33,7 +33,7 @@ public class SchoolDialog extends Dialog {
         Window window = getWindow();
         WindowManager.LayoutParams params = window.getAttributes();
         DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-        params.width = (int) (metrics.widthPixels * 0.8);
+        params.width = (int) (metrics.widthPixels * 0.9);
         window.setAttributes(params);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.dialog_school_toolbar);

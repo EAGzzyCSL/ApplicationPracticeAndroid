@@ -1,6 +1,7 @@
 package com.bit.schoolcomment.fragment.shop;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ public abstract class ShopListFragment extends BaseListFragment<ShopModel> {
 
         @Override
         public void onBindViewHolder(ShopViewHolder holder, int position) {
+            holder.itemView.setLabelFor(position);
             ShopModel model = getModel(position);
             holder.imageDv.setImageURI("http://i.k1982.com/design/up/200710/2007102763640374.jpg");
             holder.nameTv.setText(model.name);
@@ -49,7 +51,12 @@ public abstract class ShopListFragment extends BaseListFragment<ShopModel> {
 
         @Override
         public void onClick(View v) {
+            ShopModel model = getModel(v.getLabelFor());
             Intent intent = new Intent(getActivity(), ShopActivity.class);
+            intent.putExtra("shopId", model.ID);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("model", model);
+            intent.putExtra("bundle", bundle);
             startActivity(intent);
         }
     }

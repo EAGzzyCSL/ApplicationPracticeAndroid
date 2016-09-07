@@ -1,9 +1,11 @@
 package com.bit.schoolcomment.util;
 
 import com.bit.schoolcomment.event.LoginEvent;
+import com.bit.schoolcomment.event.LogoutEvent;
 import com.bit.schoolcomment.event.RegisterEvent;
-import com.bit.schoolcomment.event.school.SchoolListEvent;
 import com.bit.schoolcomment.event.goods.HotGoodsListEvent;
+import com.bit.schoolcomment.event.goods.ShopGoodsListEvent;
+import com.bit.schoolcomment.event.school.SchoolListEvent;
 import com.bit.schoolcomment.event.shop.HotShopListEvent;
 import com.bit.schoolcomment.model.UserModel;
 import com.bit.schoolcomment.model.list.GoodsListModel;
@@ -20,10 +22,12 @@ public class PullUtil {
     private static final String BASE_URL = "http://123.206.84.137/ApplicationPracticeWeb/php/receive.php?PostType=";
     private static final String REGISTER = BASE_URL + "Register";
     private static final String LOGIN = BASE_URL + "Login";
+    private static final String LOGOUT = BASE_URL + "logout";
     private static final String CHECK_TOKEN = BASE_URL + "Check_token";
     private static final String GET_SCHOOL = BASE_URL + "Get_school";
     private static final String GET_HOT_SHOP = BASE_URL + "Get_hotshop";
     private static final String GET_HOT_GOODS = BASE_URL + "Get_hotgoods";
+    private static final String GET_SHOP_GOODS = BASE_URL + "Get_shopgoods";
 
     private static volatile PullUtil sPullUtil;
 
@@ -38,10 +42,17 @@ public class PullUtil {
         return sPullUtil;
     }
 
-    private boolean isSuccessCode(String result) {
+    private void addIdAndToken(PullRequest request) {
+        int userId = DataUtil.getUserModel().ID;
+        String token = DataUtil.getUserModel().token;
+        request.setParams("user_ID", String.valueOf(userId));
+        request.setParams("token", token);
+    }
+
+    private boolean isSuccessCode(String result, int code) {
         JsonObject jsonObject = new JsonParser().parse(result).getAsJsonObject();
         ToastUtil.show(jsonObject.get("msg").getAsString());
-        return jsonObject.get("code").getAsInt() == 1;
+        return jsonObject.get("code").getAsInt() == code;
     }
 
     public void register(String name, String password) {
@@ -52,7 +63,7 @@ public class PullUtil {
 
             @Override
             public void getResult(String result) {
-                if (isSuccessCode(result)) {
+                if (isSuccessCode(result, 1)) {
                     EventBus.getDefault().post(new RegisterEvent());
                 }
             }
@@ -68,10 +79,25 @@ public class PullUtil {
 
             @Override
             public void getResult(String result) {
-                if (isSuccessCode(result)) {
+                if (isSuccessCode(result, 1)) {
                     JsonObject jsonObject = new JsonParser().parse(result).getAsJsonObject();
                     UserModel model = new Gson().fromJson(jsonObject.get("data"), UserModel.class);
                     EventBus.getDefault().post(new LoginEvent(model));
+                }
+            }
+        });
+        request.doPost();
+    }
+
+    public void logout() {
+        PullRequest request = new PullRequest(LOGOUT);
+        addIdAndToken(request);
+        request.setResponseListener(new ResponseListener() {
+
+            @Override
+            public void getResult(String result) {
+                if (isSuccessCode(result, 45)) {
+                    EventBus.getDefault().post(new LogoutEvent());
                 }
             }
         });
@@ -130,6 +156,20 @@ public class PullUtil {
             public void getResult(String result) {
                 GoodsListModel model = new Gson().fromJson(result, GoodsListModel.class);
                 EventBus.getDefault().post(new HotGoodsListEvent(model));
+            }
+        });
+        request.doPost();
+    }
+
+    public void getShopGoods(int shopId) {
+        PullRequest request = new PullRequest(GET_SHOP_GOODS);
+        request.setParams("shop_ID", String.valueOf(shopId));
+        request.setResponseListener(new ResponseListener() {
+
+            @Override
+            public void getResult(String result) {
+                GoodsListModel model = new Gson().fromJson(result, GoodsListModel.class);
+                EventBus.getDefault().post(new ShopGoodsListEvent(model));
             }
         });
         request.doPost();

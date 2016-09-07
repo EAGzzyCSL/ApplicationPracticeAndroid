@@ -11,20 +11,20 @@
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/shop_collapsingToolbarLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="@color/primary"
-            app:expandedTitleMarginBottom="0dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:title="test">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/shop_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                app:layout_collapseMode="parallax" />
+                app:layout_collapseMode="parallax"
+                app:placeholderImage="@drawable/ic_loading" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/shop_toolbar"
@@ -44,7 +44,7 @@
 
         <fragment
             android:id="@+id/shop_fragment"
-            android:name="com.bit.schoolcomment.fragment.goods.HotGoodsListFragment"
+            android:name="com.bit.schoolcomment.fragment.goods.ShopGoodsListFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
