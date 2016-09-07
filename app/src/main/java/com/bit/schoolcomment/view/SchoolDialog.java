@@ -9,11 +9,22 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.bit.schoolcomment.R;
+import com.bit.schoolcomment.event.school.SchoolSelectEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class SchoolDialog extends Dialog {
 
     public SchoolDialog(Context context) {
         super(context);
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        EventBus.getDefault().register(this);
         setContentView(R.layout.dialog_school);
         initView();
     }
@@ -35,5 +46,16 @@ public class SchoolDialog extends Dialog {
                 onBackPressed();
             }
         });
+    }
+
+    @Override
+    public void dismiss() {
+        super.dismiss();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleSchoolSelect(SchoolSelectEvent event) {
+        dismiss();
     }
 }

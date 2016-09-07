@@ -6,12 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.bit.schoolcomment.MyApplication;
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.model.BaseModel;
-import com.bit.schoolcomment.util.ToastUtil;
 
 import java.util.List;
 
@@ -72,9 +70,7 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
     protected void updateUI(List<M> list) {
         mSwipeRefreshLayout.setRefreshing(false);
 
-        if (list == null) {
-            ToastUtil.show(getString(R.string.network_error));
-        } else if (list.size() == 0) {
+        if (list == null || list.size() == 0) {
             mRecyclerView.setAdapter(mEmptyAdapter);
         } else {
             mList = list;
@@ -117,7 +113,6 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
 
         @Override
         public void onBindViewHolder(EmptyViewHolder holder, int position) {
-            holder.emptyTv.setText("empty");
         }
 
         @Override
@@ -128,11 +123,8 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
 
     private static class EmptyViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView emptyTv;
-
         public EmptyViewHolder(View itemView) {
             super(itemView);
-            emptyTv = (TextView) itemView.findViewById(R.id.item_empty_text);
         }
     }
 }

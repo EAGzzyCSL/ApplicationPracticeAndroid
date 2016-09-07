@@ -7,10 +7,14 @@ import android.widget.TextView;
 
 import com.bit.schoolcomment.MyApplication;
 import com.bit.schoolcomment.R;
+import com.bit.schoolcomment.model.SchoolModel;
 import com.bit.schoolcomment.util.PreferenceUtil;
 import com.bit.schoolcomment.util.PullUtil;
+import com.bit.schoolcomment.util.DataUtil;
 
 public class SplashActivity extends BaseActivity {
+
+    private static final int DELAY = 1000;
 
     @Override
     protected boolean isEventBusOn() {
@@ -28,13 +32,23 @@ public class SplashActivity extends BaseActivity {
         TextView subtitleTv = (TextView) findViewById(R.id.splash_subtitle);
 
         if (titleTv != null) titleTv.startAnimation(MyApplication.getDefault().mItemAnimation);
-        ObjectAnimator.ofFloat(subtitleTv, "rotationX", 0f, 360f).setDuration(1500).start();
+        ObjectAnimator.ofFloat(subtitleTv, "rotationX", 0f, 360f).setDuration(DELAY).start();
 
         if (PreferenceUtil.contains("userId")) {
             int id = PreferenceUtil.getInt("userId");
             String token = PreferenceUtil.getString("token");
             PullUtil.getInstance().checkToken(id, token);
         }
+
+        SchoolModel model = new SchoolModel();
+        if (PreferenceUtil.contains("schoolId")) {
+            model.ID = PreferenceUtil.getInt("schoolId");
+            model.name = PreferenceUtil.getString("schoolName");
+        } else {
+            model.ID = 3;
+            model.name = "北京理工大学";
+        }
+        DataUtil.setSchoolModel(model);
 
         new Handler().postDelayed(new Runnable() {
 
@@ -44,6 +58,6 @@ public class SplashActivity extends BaseActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 1500);
+        }, DELAY);
     }
 }

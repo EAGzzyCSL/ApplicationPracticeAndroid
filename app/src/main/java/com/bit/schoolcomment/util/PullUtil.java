@@ -2,9 +2,9 @@ package com.bit.schoolcomment.util;
 
 import com.bit.schoolcomment.event.LoginEvent;
 import com.bit.schoolcomment.event.RegisterEvent;
-import com.bit.schoolcomment.event.SchoolEvent;
-import com.bit.schoolcomment.event.goods.HotGoodsEvent;
-import com.bit.schoolcomment.event.shop.HotShopEvent;
+import com.bit.schoolcomment.event.school.SchoolListEvent;
+import com.bit.schoolcomment.event.goods.HotGoodsListEvent;
+import com.bit.schoolcomment.event.shop.HotShopListEvent;
 import com.bit.schoolcomment.model.UserModel;
 import com.bit.schoolcomment.model.list.GoodsListModel;
 import com.bit.schoolcomment.model.list.SchoolListModel;
@@ -101,7 +101,7 @@ public class PullUtil {
             @Override
             public void getResult(String result) {
                 SchoolListModel model = new Gson().fromJson(result, SchoolListModel.class);
-                EventBus.getDefault().post(new SchoolEvent(model));
+                EventBus.getDefault().post(new SchoolListEvent(model));
             }
         });
         request.doPost();
@@ -115,7 +115,7 @@ public class PullUtil {
             @Override
             public void getResult(String result) {
                 ShopListModel model = new Gson().fromJson(result, ShopListModel.class);
-                EventBus.getDefault().post(new HotShopEvent(model));
+                EventBus.getDefault().post(new HotShopListEvent(model));
             }
         });
         request.doPost();
@@ -129,7 +129,7 @@ public class PullUtil {
             @Override
             public void getResult(String result) {
                 GoodsListModel model = new Gson().fromJson(result, GoodsListModel.class);
-                EventBus.getDefault().post(new HotGoodsEvent(model));
+                EventBus.getDefault().post(new HotGoodsListEvent(model));
             }
         });
         request.doPost();

@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
@@ -40,8 +41,10 @@ public abstract class ShopListFragment extends BaseListFragment<ShopModel> {
         @Override
         public void onBindViewHolder(ShopViewHolder holder, int position) {
             ShopModel model = getModel(position);
-            holder.imageDv.setImageURI("https://www.baidu.com/img/bd_logo1.png");
+            holder.imageDv.setImageURI("http://i.k1982.com/design/up/200710/2007102763640374.jpg");
             holder.nameTv.setText(model.name);
+            holder.addressTv.setText(model.address);
+            holder.rateRb.setRating(model.rate);
         }
 
         @Override
@@ -55,11 +58,15 @@ public abstract class ShopListFragment extends BaseListFragment<ShopModel> {
 
         private SimpleDraweeView imageDv;
         private TextView nameTv;
+        private TextView addressTv;
+        private RatingBar rateRb;
 
         public ShopViewHolder(View itemView) {
             super(itemView);
             imageDv = (SimpleDraweeView) itemView.findViewById(R.id.item_shop_image);
             nameTv = (TextView) itemView.findViewById(R.id.item_shop_name);
+            addressTv = (TextView) itemView.findViewById(R.id.item_shop_address);
+            rateRb = (RatingBar) itemView.findViewById(R.id.item_shop_rate);
         }
     }
 }

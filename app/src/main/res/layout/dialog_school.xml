@@ -13,12 +13,12 @@
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
+        android:id="@+id/dialog_school_fragment_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <fragment
-            android:id="@+id/dialog_school_fragment"
-            android:name="com.bit.schoolcomment.fragment.SchoolListFragment"
+            android:name="com.bit.schoolcomment.fragment.school.SchoolListFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

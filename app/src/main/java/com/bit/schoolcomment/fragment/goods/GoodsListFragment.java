@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
@@ -23,15 +24,15 @@ public abstract class GoodsListFragment extends BaseListFragment<GoodsModel> {
 
     @Override
     protected RecyclerView.Adapter getAdapter() {
-        return new ShopListAdapter();
+        return new GoodsListAdapter();
     }
 
-    private class ShopListAdapter extends BaseListAdapter<GoodsViewHolder>
+    private class GoodsListAdapter extends BaseListAdapter<GoodsViewHolder>
             implements View.OnClickListener {
 
         @Override
         public GoodsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.item_shop, parent, false);
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.item_goods, parent, false);
             GoodsViewHolder holder = new GoodsViewHolder(view);
             holder.itemView.setOnClickListener(this);
             return holder;
@@ -40,8 +41,10 @@ public abstract class GoodsListFragment extends BaseListFragment<GoodsModel> {
         @Override
         public void onBindViewHolder(GoodsViewHolder holder, int position) {
             GoodsModel model = getModel(position);
-            holder.imageDv.setImageURI("https://www.baidu.com/img/bd_logo1.png");
+            holder.imageDv.setImageURI("http://pic54.nipic.com/file/20141126/9422660_122829186000_2.jpg");
             holder.nameTv.setText(model.name);
+            holder.priceTv.setText("￥" + model.price);
+            holder.rateRb.setRating(model.rate);
         }
 
         @Override
@@ -55,11 +58,15 @@ public abstract class GoodsListFragment extends BaseListFragment<GoodsModel> {
 
         private SimpleDraweeView imageDv;
         private TextView nameTv;
+        private TextView priceTv;
+        private RatingBar rateRb;
 
         public GoodsViewHolder(View itemView) {
             super(itemView);
-            imageDv = (SimpleDraweeView) itemView.findViewById(R.id.item_shop_image);
-            nameTv = (TextView) itemView.findViewById(R.id.item_shop_name);
+            imageDv = (SimpleDraweeView) itemView.findViewById(R.id.item_goods_image);
+            nameTv = (TextView) itemView.findViewById(R.id.item_goods_name);
+            priceTv = (TextView) itemView.findViewById(R.id.item_goods_price);
+            rateRb = (RatingBar) itemView.findViewById(R.id.item_goods_rate);
         }
     }
 }

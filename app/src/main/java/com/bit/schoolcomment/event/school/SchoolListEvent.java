@@ -1,12 +1,12 @@
-package com.bit.schoolcomment.event;
+package com.bit.schoolcomment.event.school;
 
 import com.bit.schoolcomment.model.list.SchoolListModel;
 
-public class SchoolEvent {
+public class SchoolListEvent {
 
     public SchoolListModel schoolListModel;
 
-    public SchoolEvent(SchoolListModel schoolListModel) {
+    public SchoolListEvent(SchoolListModel schoolListModel) {
         this.schoolListModel = schoolListModel;
     }
 }

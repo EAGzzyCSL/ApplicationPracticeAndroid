@@ -2,11 +2,11 @@ package com.bit.schoolcomment.event.shop;
 
 import com.bit.schoolcomment.model.list.ShopListModel;
 
-public class HotShopEvent {
+public class HotShopListEvent {
 
     public ShopListModel shopListModel;
 
-    public HotShopEvent(ShopListModel shopListModel) {
+    public HotShopListEvent(ShopListModel shopListModel) {
         this.shopListModel = shopListModel;
     }
 }

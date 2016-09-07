@@ -17,10 +17,11 @@ import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.event.LoginEvent;
+import com.bit.schoolcomment.event.school.SchoolSelectEvent;
 import com.bit.schoolcomment.fragment.goods.HotGoodsListFragment;
 import com.bit.schoolcomment.fragment.shop.HotShopListFragment;
+import com.bit.schoolcomment.util.DataUtil;
 import com.bit.schoolcomment.util.DimensionUtil;
-import com.bit.schoolcomment.util.UserUtil;
 import com.bit.schoolcomment.view.SchoolDialog;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -31,6 +32,7 @@ import org.greenrobot.eventbus.ThreadMode;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
+    private Toolbar mToolbar;
     private SlidingPaneLayout mSlidingPaneLayout;
     private SimpleDraweeView mAvatarDv;
     private TextView mNameTv;
@@ -65,12 +67,12 @@ public class MainActivity extends BaseActivity
             updateNavHeader();
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        if (toolbar != null) {
-            toolbar.setTitle("test");
-            toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+        mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        if (mToolbar != null) {
+            mToolbar.setTitle(DataUtil.getSchoolModel().name);
+            mToolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
         }
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.main_tabLayout);
         ViewPager viewPager = (ViewPager) findViewById(R.id.main_viewPager);
@@ -86,8 +88,8 @@ public class MainActivity extends BaseActivity
     private void updateNavHeader() {
         Uri uri = Uri.parse("res://" + getPackageName() + "/" + R.drawable.ic_avatar_default);
         mAvatarDv.setImageURI(uri);
-        if (UserUtil.isLogin()) {
-            mNameTv.setText(UserUtil.getName());
+        if (DataUtil.isLogin()) {
+            mNameTv.setText(DataUtil.getUserModel().name);
         } else {
             mNameTv.setText(getString(R.string.please_login));
             mSignTv.setText(getString(R.string.login_discover_more));
@@ -137,7 +139,7 @@ public class MainActivity extends BaseActivity
                 break;
 
             case R.id.main_user_wrapper:
-                if (!UserUtil.isLogin()) {
+                if (!DataUtil.isLogin()) {
                     Intent intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
                 }
@@ -154,8 +156,14 @@ public class MainActivity extends BaseActivity
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void handleLogin(LoginEvent event) {
         EventBus.getDefault().removeStickyEvent(event);
-        UserUtil.setModel(event.userModel);
+        DataUtil.setUserModel(event.userModel);
         updateNavHeader();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleSchoolSelect(SchoolSelectEvent event) {
+        DataUtil.setSchoolModel(event.schoolModel);
+        mToolbar.setTitle(event.schoolModel.name);
     }
 
     private class PagerAdapter extends FragmentPagerAdapter {

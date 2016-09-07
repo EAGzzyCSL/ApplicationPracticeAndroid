@@ -21,4 +21,5 @@
     <string name="login_discover_more">登陆发现更多精彩~</string>
     <string name="add_comment">发表评论</string>
     <string name="not_same_password">两次密码填写不一致</string>
+    <string name="no_content">暂无内容</string>
 </resources>
