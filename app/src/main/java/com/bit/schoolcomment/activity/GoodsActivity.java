@@ -10,8 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
+import com.bit.schoolcomment.model.GoodsModel;
 import com.bit.schoolcomment.util.DimensionUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -21,7 +24,7 @@ public class GoodsActivity extends BaseActivity
         implements AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener, View.OnClickListener {
 
     private static final int MSG_WHAT = 1;
-    private static final int TIME_DELAY = 4000;
+    private static final int TIME_DELAY = 3000;
 
     private View mTitleView;
     private Handler mHandler;
@@ -52,10 +55,18 @@ public class GoodsActivity extends BaseActivity
 
     @Override
     protected void initView() {
+        GoodsModel model = getIntent().getBundleExtra("bundle").getParcelable("model");
+        assert model != null;
+
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.goods_appBarLayout);
         if (appBarLayout != null) appBarLayout.addOnOffsetChangedListener(this);
-        initToolbar(R.id.goods_toolbar, "test");
-        initToolbar(R.id.goods_toolbar2, "test");
+        initToolbar(R.id.goods_toolbar, model.name);
+        initToolbar(R.id.goods_toolbar2, model.name);
+
+        RatingBar rateRb = (RatingBar) findViewById(R.id.goods_rate);
+        TextView rateTv = (TextView) findViewById(R.id.goods_rate_num);
+        if (rateRb != null) rateRb.setRating(model.rate);
+        if (rateTv != null) rateTv.setText(String.valueOf(model.rate));
 
         mTitleView = findViewById(R.id.goods_toolbar2);
         ViewPager viewPager = (ViewPager) findViewById(R.id.goods_viewPager);
@@ -112,7 +123,7 @@ public class GoodsActivity extends BaseActivity
 
             for (int i = 0; i < 3; i++) {
                 mImageDv[i] = new SimpleDraweeView(GoodsActivity.this);
-                mImageDv[i].setImageURI("https://www.baidu.com/img/bd_logo1.png");
+                mImageDv[i].setImageURI("http://pic54.nipic.com/file/20141126/9422660_122829186000_2.jpg");
 
                 mRadioButton[i] = new RadioButton(GoodsActivity.this);
                 mRadioButton[i].setBackgroundResource(R.drawable.bg_banner_radio);

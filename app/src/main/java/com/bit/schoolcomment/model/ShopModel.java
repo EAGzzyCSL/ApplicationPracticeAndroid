@@ -10,7 +10,6 @@ public class ShopModel extends BaseModel
     public String name;
     public String address;
     public String image;
-    public int school_ID;
     public float rate;
 
     protected ShopModel(Parcel in) {
@@ -18,7 +17,6 @@ public class ShopModel extends BaseModel
         name = in.readString();
         address = in.readString();
         image = in.readString();
-        school_ID = in.readInt();
         rate = in.readFloat();
     }
 
@@ -46,7 +44,6 @@ public class ShopModel extends BaseModel
         dest.writeString(name);
         dest.writeString(address);
         dest.writeString(image);
-        dest.writeInt(school_ID);
         dest.writeFloat(rate);
     }
 }

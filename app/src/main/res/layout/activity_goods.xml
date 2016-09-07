@@ -13,15 +13,37 @@
             style="@style/Toolbar"
             app:layout_scrollFlags="scroll" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_scrollFlags="scroll" />
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:orientation="horizontal"
+            app:layout_scrollFlags="scroll">
+
+            <RatingBar
+                android:id="@+id/goods_rate"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:stepSize="0.1" />
+
+            <TextView
+                android:id="@+id/goods_rate_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/accent"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:layout_marginTop="5dp"
             app:layout_scrollFlags="scroll">
 
             <android.support.v4.view.ViewPager
@@ -34,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_gravity="bottom"
-                android:background="#55FFFFFF"
+                android:background="#99FFFFFF"
                 android:gravity="center"
                 android:orientation="horizontal" />
 
@@ -49,7 +71,7 @@
 
         <fragment
             android:id="@+id/goods_fragment"
-            android:name="com.bit.schoolcomment.fragment.comment.CommentListFragment"
+            android:name="com.bit.schoolcomment.fragment.comment.GoodsCommentListFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

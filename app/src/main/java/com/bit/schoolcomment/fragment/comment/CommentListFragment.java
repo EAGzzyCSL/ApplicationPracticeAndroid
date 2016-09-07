@@ -1,25 +1,18 @@
 package com.bit.schoolcomment.fragment.comment;
 
-import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
-import com.bit.schoolcomment.activity.ShopActivity;
 import com.bit.schoolcomment.fragment.BaseListFragment;
-import com.bit.schoolcomment.model.ShopModel;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bit.schoolcomment.model.CommentModel;
 
-public class CommentListFragment extends BaseListFragment<ShopModel> {
-
-    @Override
-    protected boolean isEventBusOn() {
-        return false;
-    }
+public abstract class CommentListFragment extends BaseListFragment<CommentModel> {
 
     @Override
     protected RecyclerView.LayoutManager getLayoutManager() {
@@ -28,45 +21,45 @@ public class CommentListFragment extends BaseListFragment<ShopModel> {
 
     @Override
     protected RecyclerView.Adapter getAdapter() {
-        return new ShopListAdapter();
+        return new CommentListAdapter();
     }
 
-    @Override
-    protected void pullNewData() {
-        //PullUtil.getInstance().searchGasStation();
-    }
-
-    private class ShopListAdapter extends BaseListAdapter<ShopViewHolder>
+    private class CommentListAdapter extends BaseListAdapter<CommentViewHolder>
             implements View.OnClickListener {
 
         @Override
-        public ShopViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.item_shop, parent, false);
-            ShopViewHolder holder = new ShopViewHolder(view);
+        public CommentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.item_comment, parent, false);
+            CommentViewHolder holder = new CommentViewHolder(view);
             holder.itemView.setOnClickListener(this);
             return holder;
         }
 
         @Override
-        public void onBindViewHolder(ShopViewHolder holder, int position) {
+        public void onBindViewHolder(CommentViewHolder holder, int position) {
+            CommentModel model = getModel(position);
+            holder.nameTv.setText("姓名");
+            holder.rateRb.setRating(model.rate);
+            holder.contentTv.setText(model.content);
         }
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(getActivity(), ShopActivity.class);
-            startActivity(intent);
+
         }
     }
 
-    private static class ShopViewHolder extends RecyclerView.ViewHolder {
+    private static class CommentViewHolder extends RecyclerView.ViewHolder {
 
-        private SimpleDraweeView imageDv;
         private TextView nameTv;
+        private RatingBar rateRb;
+        private TextView contentTv;
 
-        public ShopViewHolder(View itemView) {
+        public CommentViewHolder(View itemView) {
             super(itemView);
-            imageDv = (SimpleDraweeView) itemView.findViewById(R.id.item_shop_image);
-            nameTv = (TextView) itemView.findViewById(R.id.item_shop_name);
+            nameTv = (TextView) itemView.findViewById(R.id.item_comment_name);
+            rateRb = (RatingBar) itemView.findViewById(R.id.item_comment_rate);
+            contentTv = (TextView) itemView.findViewById(R.id.item_comment_content);
         }
     }
 }

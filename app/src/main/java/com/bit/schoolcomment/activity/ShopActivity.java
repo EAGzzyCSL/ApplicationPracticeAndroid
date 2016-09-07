@@ -3,6 +3,8 @@ package com.bit.schoolcomment.activity;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.view.View;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.model.ShopModel;
@@ -41,6 +43,12 @@ public class ShopActivity extends BaseActivity
             imageDv.setImageURI("http://i.k1982.com/design/up/200710/2007102763640374.jpg");
 
         mInfoView = findViewById(R.id.shop_info);
+        TextView addressTv = (TextView) findViewById(R.id.shop_address);
+        if (addressTv != null) addressTv.setText(model.address);
+        RatingBar rateRb = (RatingBar) findViewById(R.id.shop_rate);
+        TextView rateTv = (TextView) findViewById(R.id.shop_rate_num);
+        if (rateRb != null) rateRb.setRating(model.rate);
+        if (rateTv != null) rateTv.setText(String.valueOf(model.rate));
     }
 
     @Override

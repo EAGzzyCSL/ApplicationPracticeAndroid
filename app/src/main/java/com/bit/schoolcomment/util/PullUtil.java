@@ -3,11 +3,13 @@ package com.bit.schoolcomment.util;
 import com.bit.schoolcomment.event.LoginEvent;
 import com.bit.schoolcomment.event.LogoutEvent;
 import com.bit.schoolcomment.event.RegisterEvent;
+import com.bit.schoolcomment.event.comment.GoodsCommentListEvent;
 import com.bit.schoolcomment.event.goods.HotGoodsListEvent;
 import com.bit.schoolcomment.event.goods.ShopGoodsListEvent;
 import com.bit.schoolcomment.event.school.SchoolListEvent;
 import com.bit.schoolcomment.event.shop.HotShopListEvent;
 import com.bit.schoolcomment.model.UserModel;
+import com.bit.schoolcomment.model.list.CommentListModel;
 import com.bit.schoolcomment.model.list.GoodsListModel;
 import com.bit.schoolcomment.model.list.SchoolListModel;
 import com.bit.schoolcomment.model.list.ShopListModel;
@@ -28,6 +30,7 @@ public class PullUtil {
     private static final String GET_HOT_SHOP = BASE_URL + "Get_hotshop";
     private static final String GET_HOT_GOODS = BASE_URL + "Get_hotgoods";
     private static final String GET_SHOP_GOODS = BASE_URL + "Get_shopgoods";
+    private static final String GET_GOODS_COMMENT = BASE_URL + "Get_goodscomment";
 
     private static volatile PullUtil sPullUtil;
 
@@ -170,6 +173,20 @@ public class PullUtil {
             public void getResult(String result) {
                 GoodsListModel model = new Gson().fromJson(result, GoodsListModel.class);
                 EventBus.getDefault().post(new ShopGoodsListEvent(model));
+            }
+        });
+        request.doPost();
+    }
+
+    public void getGoodsComment(int goodsId) {
+        PullRequest request = new PullRequest(GET_GOODS_COMMENT);
+        request.setParams("goods_ID", String.valueOf(goodsId));
+        request.setResponseListener(new ResponseListener() {
+
+            @Override
+            public void getResult(String result) {
+                CommentListModel model = new Gson().fromJson(result, CommentListModel.class);
+                EventBus.getDefault().post(new GoodsCommentListEvent(model));
             }
         });
         request.doPost();

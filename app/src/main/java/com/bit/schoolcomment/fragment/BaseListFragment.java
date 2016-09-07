@@ -17,9 +17,8 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
         implements SwipeRefreshLayout.OnRefreshListener {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView mRecyclerView;
+    private View mEmptyView;
     private RecyclerView.Adapter mAdapter;
-    private EmptyAdapter mEmptyAdapter;
 
     private List<M> mList;
 
@@ -40,11 +39,13 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.base_list_swipeRefreshLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.base_list_recyclerView);
-        mRecyclerView.setLayoutManager(getLayoutManager());
-        mRecyclerView.setHasFixedSize(true);
+        mEmptyView = view.findViewById(R.id.item_empty_wrapper);
         mAdapter = getAdapter();
-        mEmptyAdapter = new EmptyAdapter();
+
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.base_list_recyclerView);
+        recyclerView.setLayoutManager(getLayoutManager());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(mAdapter);
 
         mSwipeRefreshLayout.post(new Runnable() {
 
@@ -68,14 +69,17 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
     protected abstract void pullNewData();
 
     protected void updateUI(List<M> list) {
-        mSwipeRefreshLayout.setRefreshing(false);
-
         if (list == null || list.size() == 0) {
-            mRecyclerView.setAdapter(mEmptyAdapter);
+            mSwipeRefreshLayout.setVisibility(View.GONE);
+            mEmptyView.setVisibility(View.VISIBLE);
         } else {
             mList = list;
-            mRecyclerView.setAdapter(mAdapter);
+            mSwipeRefreshLayout.setVisibility(View.VISIBLE);
+            mEmptyView.setVisibility(View.GONE);
+            mAdapter.notifyDataSetChanged();
         }
+
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     protected M getModel(int location) {
@@ -100,31 +104,6 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
         public int getItemCount() {
             if (mList == null) return 0;
             else return mList.size();
-        }
-    }
-
-    private class EmptyAdapter extends RecyclerView.Adapter<EmptyViewHolder> {
-
-        @Override
-        public EmptyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.item_empty, parent, false);
-            return new EmptyViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(EmptyViewHolder holder, int position) {
-        }
-
-        @Override
-        public int getItemCount() {
-            return 1;
-        }
-    }
-
-    private static class EmptyViewHolder extends RecyclerView.ViewHolder {
-
-        public EmptyViewHolder(View itemView) {
-            super(itemView);
         }
     }
 }

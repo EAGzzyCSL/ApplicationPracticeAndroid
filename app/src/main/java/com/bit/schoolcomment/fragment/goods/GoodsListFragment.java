@@ -1,6 +1,7 @@
 package com.bit.schoolcomment.fragment.goods;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ public abstract class GoodsListFragment extends BaseListFragment<GoodsModel> {
 
         @Override
         public void onBindViewHolder(GoodsViewHolder holder, int position) {
+            holder.itemView.setLabelFor(position);
             GoodsModel model = getModel(position);
             holder.imageDv.setImageURI("http://pic54.nipic.com/file/20141126/9422660_122829186000_2.jpg");
             holder.nameTv.setText(model.name);
@@ -49,7 +51,12 @@ public abstract class GoodsListFragment extends BaseListFragment<GoodsModel> {
 
         @Override
         public void onClick(View v) {
+            GoodsModel model = getModel(v.getLabelFor());
             Intent intent = new Intent(getActivity(), GoodsActivity.class);
+            intent.putExtra("goodsId", model.ID);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("model", model);
+            intent.putExtra("bundle", bundle);
             startActivity(intent);
         }
     }
