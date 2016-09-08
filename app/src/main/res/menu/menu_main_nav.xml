@@ -9,12 +9,17 @@
                 android:icon="@drawable/ic_star_white_24dp"
                 android:title="@string/my_collection" />
 
+            <item
+                android:id="@+id/menu_main_comment"
+                android:icon="@drawable/ic_msg_white_24dp"
+                android:title="@string/my_comment" />
+
         </menu>
     </item>
 
     <item
         android:id="@+id/menu_main_logout"
-        android:icon="@drawable/ic_arrow_back_white_24dp"
+        android:icon="@drawable/ic_logout_white_24dp"
         android:title="@string/logout" />
 
 </menu>

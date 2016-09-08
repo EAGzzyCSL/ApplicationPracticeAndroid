@@ -6,6 +6,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bit.schoolcomment.MyApplication;
 import com.bit.schoolcomment.R;
+import com.bit.schoolcomment.event.NetworkErrorEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -66,5 +69,6 @@ abstract class ResponseListener {
 
     public void getError() {
         ToastUtil.show(MyApplication.getDefault().getString(R.string.network_error));
+        EventBus.getDefault().post(new NetworkErrorEvent());
     }
 }

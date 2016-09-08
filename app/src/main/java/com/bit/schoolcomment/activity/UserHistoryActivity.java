@@ -12,6 +12,9 @@ import com.bit.schoolcomment.util.DataUtil;
 
 public class UserHistoryActivity extends BaseActivity {
 
+    public static final int COLLECTION = 0;
+    public static final int COMMENT = 1;
+
     @Override
     protected boolean isEventBusOn() {
         return false;
@@ -31,13 +34,15 @@ public class UserHistoryActivity extends BaseActivity {
         if (tabLayout != null && viewPager != null) {
             viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
             tabLayout.setupWithViewPager(viewPager);
+            int tab = getIntent().getIntExtra("tab", COLLECTION);
+            viewPager.setCurrentItem(tab, true);
         }
     }
 
     private class PagerAdapter extends FragmentPagerAdapter {
 
-        private final String[] TITLE = {"我的收藏"};
-        private final Fragment[] FRAGMENTS = {new GoodsCollectionListFragment()};
+        private final String[] TITLE = {getString(R.string.my_collection), getString(R.string.my_comment)};
+        private final Fragment[] FRAGMENTS = {new GoodsCollectionListFragment(), new GoodsCollectionListFragment()};
 
         public PagerAdapter(FragmentManager fm) {
             super(fm);

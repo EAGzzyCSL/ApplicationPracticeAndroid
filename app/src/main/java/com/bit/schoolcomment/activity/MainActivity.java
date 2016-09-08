@@ -2,7 +2,6 @@ package com.bit.schoolcomment.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -28,7 +27,6 @@ import com.bit.schoolcomment.util.DimensionUtil;
 import com.bit.schoolcomment.util.PreferenceUtil;
 import com.bit.schoolcomment.util.PullUtil;
 import com.bit.schoolcomment.view.SchoolDialog;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,7 +37,6 @@ public class MainActivity extends BaseActivity
 
     private Toolbar mToolbar;
     private SlidingPaneLayout mSlidingPaneLayout;
-    private SimpleDraweeView mAvatarDv;
     private TextView mNameTv;
     private TextView mSignTv;
 
@@ -66,7 +63,6 @@ public class MainActivity extends BaseActivity
             navigationView.setNavigationItemSelectedListener(this);
             View navHeader = navigationView.getHeaderView(0);
             navHeader.findViewById(R.id.main_user_wrapper).setOnClickListener(this);
-            mAvatarDv = (SimpleDraweeView) navHeader.findViewById(R.id.main_user_avatar);
             mNameTv = (TextView) navHeader.findViewById(R.id.main_user_name);
             mSignTv = (TextView) navHeader.findViewById(R.id.main_user_sign);
             updateNavHeader();
@@ -91,10 +87,9 @@ public class MainActivity extends BaseActivity
     }
 
     private void updateNavHeader() {
-        Uri uri = Uri.parse("res://" + getPackageName() + "/" + R.drawable.ic_avatar_default);
-        mAvatarDv.setImageURI(uri);
         if (DataUtil.isLogin()) {
             mNameTv.setText(DataUtil.getUserModel().name);
+            mSignTv.setText(getString(R.string.edit_sign));
         } else {
             mNameTv.setText(getString(R.string.please_login));
             mSignTv.setText(getString(R.string.login_discover_more));
@@ -128,6 +123,11 @@ public class MainActivity extends BaseActivity
             Intent intent = new Intent(this, UserHistoryActivity.class);
             switch (item.getItemId()) {
                 case R.id.menu_main_collection:
+                    intent.putExtra("tab", UserHistoryActivity.COLLECTION);
+                    break;
+
+                case R.id.menu_main_comment:
+                    intent.putExtra("tab", UserHistoryActivity.COMMENT);
                     break;
             }
             startActivity(intent);

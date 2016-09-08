@@ -6,6 +6,7 @@ import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,7 +39,7 @@ public class GoodsActivity extends BaseActivity
     private MenuItem mCollectMenu;
     private MenuItem mCancelMenu;
 
-    private View mTitleView;
+    private Toolbar mTitleView;
     private Handler mHandler;
     private SimpleDraweeView[] mImageDv;
     private RadioButton[] mRadioButton;
@@ -73,14 +74,25 @@ public class GoodsActivity extends BaseActivity
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.goods_appBarLayout);
         if (appBarLayout != null) appBarLayout.addOnOffsetChangedListener(this);
         initToolbar(R.id.goods_toolbar, mGoodsModel.name);
-        //initToolbar(R.id.goods_toolbar2, mGoodsModel.name);
 
         RatingBar rateRb = (RatingBar) findViewById(R.id.goods_rate);
         TextView rateTv = (TextView) findViewById(R.id.goods_rate_num);
         if (rateRb != null) rateRb.setRating(mGoodsModel.rate);
         if (rateTv != null) rateTv.setText(String.valueOf(mGoodsModel.rate));
 
-        mTitleView = findViewById(R.id.goods_toolbar2);
+        mTitleView = (Toolbar) findViewById(R.id.goods_toolbar2);
+        if (mTitleView != null) {
+            mTitleView.setTitle(mGoodsModel.name);
+            mTitleView.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+            mTitleView.setNavigationOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+        }
+
         ViewPager viewPager = (ViewPager) findViewById(R.id.goods_viewPager);
         if (viewPager != null) {
             viewPager.setAdapter(new ImagePagerAdapter());
@@ -118,7 +130,7 @@ public class GoodsActivity extends BaseActivity
                 break;
         }
 
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

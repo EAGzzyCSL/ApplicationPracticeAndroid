@@ -3,18 +3,18 @@ package com.bit.schoolcomment.activity;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Handler;
+import android.view.View;
 import android.widget.TextView;
 
-import com.bit.schoolcomment.MyApplication;
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.model.SchoolModel;
+import com.bit.schoolcomment.util.DataUtil;
 import com.bit.schoolcomment.util.PreferenceUtil;
 import com.bit.schoolcomment.util.PullUtil;
-import com.bit.schoolcomment.util.DataUtil;
 
 public class SplashActivity extends BaseActivity {
 
-    private static final int DELAY = 1000;
+    private static final int DELAY = 2000;
 
     @Override
     protected boolean isEventBusOn() {
@@ -29,10 +29,19 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void initView() {
         TextView titleTv = (TextView) findViewById(R.id.splash_title);
-        TextView subtitleTv = (TextView) findViewById(R.id.splash_subtitle);
+        ObjectAnimator.ofFloat(titleTv, "alpha", 0f, 1f).setDuration(DELAY / 3).start();
 
-        if (titleTv != null) titleTv.startAnimation(MyApplication.getDefault().mItemAnimation);
-        ObjectAnimator.ofFloat(subtitleTv, "rotationX", 0f, 360f).setDuration(DELAY).start();
+        final TextView subtitleTv = (TextView) findViewById(R.id.splash_subtitle);
+        if (subtitleTv != null) {
+            subtitleTv.postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    subtitleTv.setVisibility(View.VISIBLE);
+                    ObjectAnimator.ofFloat(subtitleTv, "rotationX", 0f, 360f).setDuration(DELAY * 2 / 3).start();
+                }
+            }, DELAY / 3);
+        }
 
         if (PreferenceUtil.contains("userId")) {
             int id = PreferenceUtil.getInt("userId");

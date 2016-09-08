@@ -38,7 +38,7 @@ public abstract class CommentListFragment extends BaseListFragment<CommentModel>
         @Override
         public void onBindViewHolder(CommentViewHolder holder, int position) {
             CommentModel model = getModel(position);
-            holder.nameTv.setText("姓名");
+            holder.nameTv.setText(model.name);
             holder.rateRb.setRating(model.rate);
             holder.contentTv.setText(model.content);
         }

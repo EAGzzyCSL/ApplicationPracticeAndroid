@@ -9,7 +9,11 @@ import android.view.ViewGroup;
 
 import com.bit.schoolcomment.MyApplication;
 import com.bit.schoolcomment.R;
+import com.bit.schoolcomment.event.NetworkErrorEvent;
 import com.bit.schoolcomment.model.BaseModel;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -88,6 +92,11 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
 
     protected M getModel(int location) {
         return mList.get(location);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleNetworkError(NetworkErrorEvent event) {
+        setRefreshing(false);
     }
 
     protected abstract class BaseListAdapter<V extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<V> {
