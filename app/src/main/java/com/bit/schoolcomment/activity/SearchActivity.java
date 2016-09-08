@@ -67,9 +67,9 @@ public class SearchActivity extends BaseActivity
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (checkedId == R.id.search_option_shop) {
+        if (checkedId == R.id.search_type_shop) {
             transaction.replace(R.id.search_fragment, new SearchShopListFragment());
-        } else if (checkedId == R.id.search_option_goods) {
+        } else if (checkedId == R.id.search_type_goods) {
             transaction.replace(R.id.search_fragment, new SearchGoodsListFragment());
         }
         transaction.commit();
