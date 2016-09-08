@@ -4,6 +4,8 @@ import com.bit.schoolcomment.event.LoginEvent;
 import com.bit.schoolcomment.event.LogoutEvent;
 import com.bit.schoolcomment.event.RegisterEvent;
 import com.bit.schoolcomment.event.comment.GoodsCommentListEvent;
+import com.bit.schoolcomment.event.goods.GoodsCollectionEvent;
+import com.bit.schoolcomment.event.goods.GoodsCollectionListEvent;
 import com.bit.schoolcomment.event.goods.HotGoodsListEvent;
 import com.bit.schoolcomment.event.goods.SearchGoodsListEvent;
 import com.bit.schoolcomment.event.goods.ShopGoodsListEvent;
@@ -35,6 +37,10 @@ public class PullUtil {
     private static final String GET_HOT_GOODS = BASE_URL + "Get_hotgoods";
     private static final String GET_SHOP_GOODS = BASE_URL + "Get_shopgoods";
     private static final String GET_GOODS_COMMENT = BASE_URL + "Get_goodscomment";
+    private static final String GET_COLLECTION = BASE_URL + "Get_collection";
+    private static final String JUDGE_COLLECTION = BASE_URL + "Judge_collection";
+    private static final String ADD_COLLECTION = BASE_URL + "add_collection";
+    private static final String CANCEL_COLLECTION = BASE_URL + "delete_collection";
 
     private static volatile PullUtil sPullUtil;
 
@@ -221,6 +227,68 @@ public class PullUtil {
             public void getResult(String result) {
                 CommentListModel model = new Gson().fromJson(result, CommentListModel.class);
                 EventBus.getDefault().post(new GoodsCommentListEvent(model));
+            }
+        });
+        request.doPost();
+    }
+
+    public void getCollection() {
+        PullRequest request = new PullRequest(GET_COLLECTION);
+        addIdAndToken(request);
+        request.setResponseListener(new ResponseListener() {
+
+            @Override
+            public void getResult(String result) {
+                GoodsListModel model = new Gson().fromJson(result, GoodsListModel.class);
+                EventBus.getDefault().post(new GoodsCollectionListEvent(model));
+            }
+        });
+        request.doPost();
+    }
+
+    public void judgeCollection(int goodsId) {
+        PullRequest request = new PullRequest(JUDGE_COLLECTION);
+        addIdAndToken(request);
+        request.setParams("goods_ID", String.valueOf(goodsId));
+        request.setResponseListener(new ResponseListener() {
+
+            @Override
+            public void getResult(String result) {
+                JsonObject jsonObject = new JsonParser().parse(result).getAsJsonObject();
+                boolean collected = jsonObject.get("code").getAsInt() == 34;
+                EventBus.getDefault().post(new GoodsCollectionEvent(collected));
+            }
+        });
+        request.doPost();
+    }
+
+    public void addCollection(int goodsId) {
+        PullRequest request = new PullRequest(ADD_COLLECTION);
+        addIdAndToken(request);
+        request.setParams("goods_ID", String.valueOf(goodsId));
+        request.setResponseListener(new ResponseListener() {
+
+            @Override
+            public void getResult(String result) {
+                if (isSuccessCode(result, 41)) {
+                    EventBus.getDefault().post(new GoodsCollectionEvent(true));
+                }
+            }
+        });
+        request.doPost();
+    }
+
+    public void cancelCollection(int goodsId) {
+        PullRequest request = new PullRequest(CANCEL_COLLECTION);
+        addIdAndToken(request);
+        request.setParams("goods_ID", String.valueOf(goodsId));
+        request.setResponseListener(new ResponseListener() {
+
+            @Override
+            public void getResult(String result) {
+                if (isSuccessCode(result, 43)) {
+                    EventBus.getDefault().post(new GoodsCollectionEvent(false));
+                }
             }
         });
         request.doPost();

@@ -103,21 +103,34 @@ public class MainActivity extends BaseActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_main_logout:
-                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-                dialog.setTitle(getString(R.string.hint));
-                dialog.setMessage(getString(R.string.confirm_logout));
-                dialog.setPositiveButton(getString(R.string.sure), new DialogInterface.OnClickListener() {
+        if (!DataUtil.isLogin()) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            return true;
+        }
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        PullUtil.getInstance().logout();
-                    }
-                });
-                dialog.setNegativeButton(getString(R.string.cancel), null);
-                dialog.show();
-                break;
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_main_logout) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle(getString(R.string.hint));
+            dialog.setMessage(getString(R.string.confirm_logout));
+            dialog.setPositiveButton(getString(R.string.sure), new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    PullUtil.getInstance().logout();
+                }
+            });
+            dialog.setNegativeButton(getString(R.string.cancel), null);
+            dialog.show();
+
+        } else {
+            Intent intent = new Intent(this, UserHistoryActivity.class);
+            switch (item.getItemId()) {
+                case R.id.menu_main_collection:
+                    break;
+            }
+            startActivity(intent);
         }
 
         return true;

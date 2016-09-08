@@ -28,7 +28,7 @@ public abstract class GoodsListFragment extends BaseListFragment<GoodsModel> {
         return new GoodsListAdapter();
     }
 
-    private class GoodsListAdapter extends BaseListAdapter<GoodsViewHolder>
+    protected class GoodsListAdapter extends BaseListAdapter<GoodsViewHolder>
             implements View.OnClickListener {
 
         @Override
@@ -61,7 +61,7 @@ public abstract class GoodsListFragment extends BaseListFragment<GoodsModel> {
         }
     }
 
-    private static class GoodsViewHolder extends RecyclerView.ViewHolder {
+    protected static class GoodsViewHolder extends RecyclerView.ViewHolder {
 
         private SimpleDraweeView imageDv;
         private TextView nameTv;

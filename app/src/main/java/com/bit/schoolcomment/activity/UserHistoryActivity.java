@@ -7,8 +7,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.bit.schoolcomment.R;
-import com.bit.schoolcomment.fragment.comment.CommentListFragment;
-import com.bit.schoolcomment.fragment.shop.HotShopListFragment;
+import com.bit.schoolcomment.fragment.goods.GoodsCollectionListFragment;
+import com.bit.schoolcomment.util.DataUtil;
 
 public class UserHistoryActivity extends BaseActivity {
 
@@ -24,7 +24,7 @@ public class UserHistoryActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        initToolbar(R.id.user_history_toolbar, "test");
+        initToolbar(R.id.user_history_toolbar, DataUtil.getUserModel().name);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.user_history_tabLayout);
         ViewPager viewPager = (ViewPager) findViewById(R.id.user_history_viewPager);
@@ -36,8 +36,8 @@ public class UserHistoryActivity extends BaseActivity {
 
     private class PagerAdapter extends FragmentPagerAdapter {
 
-        private final String[] TITLE = {"我的收藏", "我的评论", "我赞过的评论"};
-        private final Fragment[] FRAGMENTS = {};
+        private final String[] TITLE = {"我的收藏"};
+        private final Fragment[] FRAGMENTS = {new GoodsCollectionListFragment()};
 
         public PagerAdapter(FragmentManager fm) {
             super(fm);

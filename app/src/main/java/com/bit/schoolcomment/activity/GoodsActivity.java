@@ -6,6 +6,8 @@ import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
@@ -14,9 +16,15 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
+import com.bit.schoolcomment.event.goods.GoodsCollectionEvent;
 import com.bit.schoolcomment.model.GoodsModel;
+import com.bit.schoolcomment.util.DataUtil;
 import com.bit.schoolcomment.util.DimensionUtil;
+import com.bit.schoolcomment.util.PullUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.ref.WeakReference;
 
@@ -25,6 +33,10 @@ public class GoodsActivity extends BaseActivity
 
     private static final int MSG_WHAT = 1;
     private static final int TIME_DELAY = 3000;
+
+    private GoodsModel mGoodsModel;
+    private MenuItem mCollectMenu;
+    private MenuItem mCancelMenu;
 
     private View mTitleView;
     private Handler mHandler;
@@ -45,7 +57,7 @@ public class GoodsActivity extends BaseActivity
 
     @Override
     protected boolean isEventBusOn() {
-        return false;
+        return true;
     }
 
     @Override
@@ -55,18 +67,18 @@ public class GoodsActivity extends BaseActivity
 
     @Override
     protected void initView() {
-        GoodsModel model = getIntent().getBundleExtra("bundle").getParcelable("model");
-        assert model != null;
+        mGoodsModel = getIntent().getBundleExtra("bundle").getParcelable("model");
+        if (DataUtil.isLogin()) PullUtil.getInstance().judgeCollection(mGoodsModel.ID);
 
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.goods_appBarLayout);
         if (appBarLayout != null) appBarLayout.addOnOffsetChangedListener(this);
-        initToolbar(R.id.goods_toolbar, model.name);
-        initToolbar(R.id.goods_toolbar2, model.name);
+        initToolbar(R.id.goods_toolbar, mGoodsModel.name);
+        //initToolbar(R.id.goods_toolbar2, mGoodsModel.name);
 
         RatingBar rateRb = (RatingBar) findViewById(R.id.goods_rate);
         TextView rateTv = (TextView) findViewById(R.id.goods_rate_num);
-        if (rateRb != null) rateRb.setRating(model.rate);
-        if (rateTv != null) rateTv.setText(String.valueOf(model.rate));
+        if (rateRb != null) rateRb.setRating(mGoodsModel.rate);
+        if (rateTv != null) rateTv.setText(String.valueOf(mGoodsModel.rate));
 
         mTitleView = findViewById(R.id.goods_toolbar2);
         ViewPager viewPager = (ViewPager) findViewById(R.id.goods_viewPager);
@@ -78,6 +90,35 @@ public class GoodsActivity extends BaseActivity
 
         View addBt = findViewById(R.id.goods_btn_add);
         if (addBt != null) addBt.setOnClickListener(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_goods, menu);
+        mCollectMenu = menu.findItem(R.id.menu_goods_collect);
+        mCancelMenu = menu.findItem(R.id.menu_goods_cancel);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (!DataUtil.isLogin()) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        switch (item.getItemId()) {
+            case R.id.menu_goods_collect:
+                PullUtil.getInstance().addCollection(mGoodsModel.ID);
+                break;
+
+            case R.id.menu_goods_cancel:
+                PullUtil.getInstance().cancelCollection(mGoodsModel.ID);
+                break;
+        }
+
+        return true;
     }
 
     @Override
@@ -110,6 +151,12 @@ public class GoodsActivity extends BaseActivity
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleGoodsCollection(GoodsCollectionEvent event) {
+        mCollectMenu.setVisible(!event.collected);
+        mCancelMenu.setVisible(event.collected);
     }
 
     private class ImagePagerAdapter extends PagerAdapter {
