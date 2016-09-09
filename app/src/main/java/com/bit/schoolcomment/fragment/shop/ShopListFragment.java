@@ -1,7 +1,6 @@
 package com.bit.schoolcomment.fragment.shop;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,7 +21,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public abstract class ShopListFragment extends BaseListFragment<ShopModel> {
 
-
     @Override
     protected RecyclerView.LayoutManager getLayoutManager() {
         return new LinearLayoutManager(getContext());
@@ -38,7 +36,7 @@ public abstract class ShopListFragment extends BaseListFragment<ShopModel> {
         if (event.targetClass == getClass()) updateUI(event.shopListModel.data);
     }
 
-    private class ShopListAdapter extends BaseListAdapter<ShopViewHolder>
+    protected class ShopListAdapter extends BaseListAdapter<ShopViewHolder>
             implements View.OnClickListener {
 
         @Override
@@ -69,12 +67,12 @@ public abstract class ShopListFragment extends BaseListFragment<ShopModel> {
         }
     }
 
-    private static class ShopViewHolder extends RecyclerView.ViewHolder {
+    protected static class ShopViewHolder extends RecyclerView.ViewHolder {
 
         private SimpleDraweeView imageDv;
-        private TextView nameTv;
+        protected TextView nameTv;
         private TextView addressTv;
-        private RatingBar rateRb;
+        protected RatingBar rateRb;
 
         public ShopViewHolder(View itemView) {
             super(itemView);

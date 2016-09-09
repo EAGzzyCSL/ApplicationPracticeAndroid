@@ -55,10 +55,6 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
         pullNewData();
     }
 
-    protected Class getClassName(){
-        return null;
-    }
-
     protected abstract RecyclerView.LayoutManager getLayoutManager();
 
     protected abstract RecyclerView.Adapter getAdapter();
@@ -72,12 +68,12 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
 
     protected void updateUI(List<M> list) {
         if (list == null || list.size() == 0) {
-            mSwipeRefreshLayout.setVisibility(View.GONE);
+            mSwipeRefreshLayout.setVisibility(View.INVISIBLE);
             mEmptyView.setVisibility(View.VISIBLE);
         } else {
             mList = list;
             mSwipeRefreshLayout.setVisibility(View.VISIBLE);
-            mEmptyView.setVisibility(View.GONE);
+            mEmptyView.setVisibility(View.INVISIBLE);
             mAdapter.notifyDataSetChanged();
         }
 

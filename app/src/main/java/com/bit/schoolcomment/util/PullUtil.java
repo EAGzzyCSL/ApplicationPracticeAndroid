@@ -15,6 +15,7 @@ import com.bit.schoolcomment.fragment.goods.SearchGoodsListFragment;
 import com.bit.schoolcomment.fragment.goods.ShopGoodsListFragment;
 import com.bit.schoolcomment.fragment.shop.HotShopListFragment;
 import com.bit.schoolcomment.fragment.shop.SearchShopListFragment;
+import com.bit.schoolcomment.fragment.shop.ShopSelectListFragment;
 import com.bit.schoolcomment.model.UserModel;
 import com.bit.schoolcomment.model.list.CommentListModel;
 import com.bit.schoolcomment.model.list.GoodsListModel;
@@ -36,6 +37,7 @@ public class PullUtil {
     private static final String SEARCH_SHOP = BASE_URL + "Shop_search";
     private static final String SEARCH_GOODS = BASE_URL + "Goods_search";
     private static final String GET_SCHOOL = BASE_URL + "Get_school";
+    private static final String GET_SCHOOL_SHOP = BASE_URL + "Get_hotshop";
     private static final String GET_HOT_SHOP = BASE_URL + "Get_hotshop";
     private static final String GET_HOT_GOODS = BASE_URL + "Get_hotgoods";
     private static final String GET_SHOP_GOODS = BASE_URL + "Get_shopgoods";
@@ -174,6 +176,20 @@ public class PullUtil {
             public void getResult(String result) {
                 SchoolListModel model = new Gson().fromJson(result, SchoolListModel.class);
                 EventBus.getDefault().post(new SchoolListEvent(model));
+            }
+        });
+        request.doPost();
+    }
+
+    public void getSchoolShop(int schoolId) {
+        PullRequest request = new PullRequest(GET_SCHOOL_SHOP);
+        request.setParams("school_ID", String.valueOf(schoolId));
+        request.setResponseListener(new ResponseListener() {
+
+            @Override
+            public void getResult(String result) {
+                ShopListModel model = new Gson().fromJson(result, ShopListModel.class);
+                EventBus.getDefault().post(new ShopListEvent(model, ShopSelectListFragment.class));
             }
         });
         request.doPost();

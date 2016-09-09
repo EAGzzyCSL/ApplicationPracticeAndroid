@@ -1,4 +1,4 @@
-package com.bit.schoolcomment.view;
+package com.bit.schoolcomment;
 
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;

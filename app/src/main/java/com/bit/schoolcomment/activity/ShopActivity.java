@@ -12,6 +12,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 public class ShopActivity extends BaseActivity
         implements AppBarLayout.OnOffsetChangedListener {
+
     public static final String EXTRA_shopId = "shopId";
     public static final String EXTRA_model = "model";
 

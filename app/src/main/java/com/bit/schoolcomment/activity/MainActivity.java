@@ -26,7 +26,7 @@ import com.bit.schoolcomment.util.DataUtil;
 import com.bit.schoolcomment.util.DimensionUtil;
 import com.bit.schoolcomment.util.PreferenceUtil;
 import com.bit.schoolcomment.util.PullUtil;
-import com.bit.schoolcomment.view.SchoolDialog;
+import com.bit.schoolcomment.dialog.SchoolDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

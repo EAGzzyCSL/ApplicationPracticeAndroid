@@ -17,6 +17,14 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <include layout="@layout/item_empty" />
+    <TextView
+        android:id="@+id/item_empty_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:text="@string/no_content"
+        android:textSize="16sp"
+        android:visibility="gone" />
 
 </FrameLayout>

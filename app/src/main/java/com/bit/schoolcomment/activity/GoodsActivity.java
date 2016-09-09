@@ -37,7 +37,6 @@ public class GoodsActivity extends BaseActivity
     private static final int MSG_WHAT = 1;
     private static final int TIME_DELAY = 3000;
 
-    private GoodsModel mGoodsModel;
     private MenuItem mCollectMenu;
     private MenuItem mCancelMenu;
 
@@ -70,21 +69,23 @@ public class GoodsActivity extends BaseActivity
 
     @Override
     protected void initView() {
-        mGoodsModel = getIntent().getParcelableExtra(EXTRA_model);
-        if (DataUtil.isLogin()) PullUtil.getInstance().judgeCollection(mGoodsModel.ID);
+        GoodsModel model = getIntent().getParcelableExtra(EXTRA_model);
+        assert model != null;
+        if (DataUtil.isLogin()) PullUtil.getInstance().judgeCollection(model.ID);
 
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.goods_appBarLayout);
         if (appBarLayout != null) appBarLayout.addOnOffsetChangedListener(this);
-        initToolbar(R.id.goods_toolbar, mGoodsModel.name);
+        initToolbar(R.id.goods_toolbar, model.name);
 
         RatingBar rateRb = (RatingBar) findViewById(R.id.goods_rate);
         TextView rateTv = (TextView) findViewById(R.id.goods_rate_num);
-        if (rateRb != null) rateRb.setRating(mGoodsModel.rate);
-        if (rateTv != null) rateTv.setText(String.valueOf(mGoodsModel.rate));
+        if (rateRb != null) rateRb.setRating(model.rate);
+        if (rateTv != null) rateTv.setText(String.valueOf(model.rate));
 
         mTitleView = (Toolbar) findViewById(R.id.goods_toolbar2);
         if (mTitleView != null) {
-            mTitleView.setTitle(mGoodsModel.name);
+            mTitleView.setTitle(model.name);
+            mTitleView.setLabelFor(model.ID);
             mTitleView.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
             mTitleView.setNavigationOnClickListener(new View.OnClickListener() {
 
@@ -122,13 +123,14 @@ public class GoodsActivity extends BaseActivity
             return true;
         }
 
+        int goodsId = mTitleView.getLabelFor();
         switch (item.getItemId()) {
             case R.id.menu_goods_collect:
-                PullUtil.getInstance().addCollection(mGoodsModel.ID);
+                PullUtil.getInstance().addCollection(goodsId);
                 break;
 
             case R.id.menu_goods_cancel:
-                PullUtil.getInstance().cancelCollection(mGoodsModel.ID);
+                PullUtil.getInstance().cancelCollection(goodsId);
                 break;
         }
 
