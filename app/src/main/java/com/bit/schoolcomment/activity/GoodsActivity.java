@@ -31,6 +31,8 @@ import java.lang.ref.WeakReference;
 
 public class GoodsActivity extends BaseActivity
         implements AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener, View.OnClickListener {
+    public static final String EXTRA_goodsId = "goodsId";
+    public static final String EXTRA_model = "model";
 
     private static final int MSG_WHAT = 1;
     private static final int TIME_DELAY = 3000;
@@ -68,7 +70,7 @@ public class GoodsActivity extends BaseActivity
 
     @Override
     protected void initView() {
-        mGoodsModel = getIntent().getBundleExtra("bundle").getParcelable("model");
+        mGoodsModel = getIntent().getParcelableExtra(EXTRA_model);
         if (DataUtil.isLogin()) PullUtil.getInstance().judgeCollection(mGoodsModel.ID);
 
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.goods_appBarLayout);

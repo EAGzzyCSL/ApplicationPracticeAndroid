@@ -44,19 +44,15 @@ public class SplashActivity extends BaseActivity {
         }
 
         if (PreferenceUtil.contains("userId")) {
-            int id = PreferenceUtil.getInt("userId");
-            String token = PreferenceUtil.getString("token");
+            int id = PreferenceUtil.getInt("userId", 0);
+            String token = PreferenceUtil.getString("token", null);
             PullUtil.getInstance().checkToken(id, token);
         }
 
-        SchoolModel model = new SchoolModel();
-        if (PreferenceUtil.contains("schoolId")) {
-            model.ID = PreferenceUtil.getInt("schoolId");
-            model.name = PreferenceUtil.getString("schoolName");
-        } else {
-            model.ID = 3;
-            model.name = "北京理工大学";
-        }
+        SchoolModel model = new SchoolModel(
+                PreferenceUtil.getInt("schoolId", 3),
+                PreferenceUtil.getString("schoolName", "北京理工大学")
+        );
         DataUtil.setSchoolModel(model);
 
         new Handler().postDelayed(new Runnable() {

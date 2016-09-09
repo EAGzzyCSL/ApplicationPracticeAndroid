@@ -12,6 +12,8 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 public class ShopActivity extends BaseActivity
         implements AppBarLayout.OnOffsetChangedListener {
+    public static final String EXTRA_shopId = "shopId";
+    public static final String EXTRA_model = "model";
 
     private View mInfoView;
 
@@ -27,7 +29,7 @@ public class ShopActivity extends BaseActivity
 
     @Override
     protected void initView() {
-        ShopModel model = getIntent().getBundleExtra("bundle").getParcelable("model");
+        ShopModel model = getIntent().getParcelableExtra(EXTRA_model);
         assert model != null;
 
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.shop_appBarLayout);

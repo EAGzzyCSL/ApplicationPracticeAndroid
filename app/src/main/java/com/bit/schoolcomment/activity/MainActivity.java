@@ -107,17 +107,16 @@ public class MainActivity extends BaseActivity
         int itemId = item.getItemId();
         if (itemId == R.id.menu_main_logout) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setTitle(getString(R.string.hint));
-            dialog.setMessage(getString(R.string.confirm_logout));
-            dialog.setPositiveButton(getString(R.string.sure), new DialogInterface.OnClickListener() {
+            dialog.setTitle(getString(R.string.hint)).
+                    setMessage(getString(R.string.confirm_logout)).
+                    setPositiveButton(getString(R.string.sure), new DialogInterface.OnClickListener() {
 
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    PullUtil.getInstance().logout();
-                }
-            });
-            dialog.setNegativeButton(getString(R.string.cancel), null);
-            dialog.show();
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            PullUtil.getInstance().logout();
+                        }
+                    }).setNegativeButton(getString(R.string.cancel), null).
+                    show();
 
         } else {
             Intent intent = new Intent(this, UserHistoryActivity.class);

@@ -17,12 +17,12 @@ public class PreferenceUtil {
         return sPreferences.contains(key);
     }
 
-    public static int getInt(String key) {
-        return sPreferences.getInt(key, 0);
+    public static int getInt(String key, int defValue) {
+        return sPreferences.getInt(key, defValue);
     }
 
-    public static String getString(String key) {
-        return sPreferences.getString(key, null);
+    public static String getString(String key, String defValue) {
+        return sPreferences.getString(key, defValue);
     }
 
     public static void putInt(String key, int value) {

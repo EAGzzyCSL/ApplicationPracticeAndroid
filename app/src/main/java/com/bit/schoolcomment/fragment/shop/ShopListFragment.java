@@ -22,6 +22,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public abstract class ShopListFragment extends BaseListFragment<ShopModel> {
 
+
     @Override
     protected RecyclerView.LayoutManager getLayoutManager() {
         return new LinearLayoutManager(getContext());
@@ -62,10 +63,8 @@ public abstract class ShopListFragment extends BaseListFragment<ShopModel> {
         public void onClick(View v) {
             ShopModel model = getModel(v.getLabelFor());
             Intent intent = new Intent(getActivity(), ShopActivity.class);
-            intent.putExtra("shopId", model.ID);
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("model", model);
-            intent.putExtra("bundle", bundle);
+            intent.putExtra(ShopActivity.EXTRA_shopId, model.ID);
+            intent.putExtra(ShopActivity.EXTRA_model, model);
             startActivity(intent);
         }
     }

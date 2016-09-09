@@ -62,10 +62,8 @@ public abstract class GoodsListFragment extends BaseListFragment<GoodsModel> {
         public void onClick(View v) {
             GoodsModel model = getModel(v.getLabelFor());
             Intent intent = new Intent(getActivity(), GoodsActivity.class);
-            intent.putExtra("goodsId", model.ID);
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("model", model);
-            intent.putExtra("bundle", bundle);
+            intent.putExtra(GoodsActivity.EXTRA_goodsId, model.ID);
+            intent.putExtra(GoodsActivity.EXTRA_model, model);
             startActivity(intent);
         }
     }
