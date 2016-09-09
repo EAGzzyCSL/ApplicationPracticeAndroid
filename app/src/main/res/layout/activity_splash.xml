@@ -34,6 +34,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="120dp"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/ic_logo" />
 
 </RelativeLayout>

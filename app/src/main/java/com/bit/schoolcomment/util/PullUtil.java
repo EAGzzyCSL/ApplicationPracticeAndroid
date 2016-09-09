@@ -1,17 +1,20 @@
 package com.bit.schoolcomment.util;
 
+import com.bit.schoolcomment.event.CommentListEvent;
+import com.bit.schoolcomment.event.GoodsCollectionEvent;
+import com.bit.schoolcomment.event.GoodsListEvent;
 import com.bit.schoolcomment.event.LoginEvent;
 import com.bit.schoolcomment.event.LogoutEvent;
 import com.bit.schoolcomment.event.RegisterEvent;
-import com.bit.schoolcomment.event.comment.GoodsCommentListEvent;
-import com.bit.schoolcomment.event.goods.GoodsCollectionEvent;
-import com.bit.schoolcomment.event.goods.GoodsCollectionListEvent;
-import com.bit.schoolcomment.event.goods.HotGoodsListEvent;
-import com.bit.schoolcomment.event.goods.SearchGoodsListEvent;
-import com.bit.schoolcomment.event.goods.ShopGoodsListEvent;
-import com.bit.schoolcomment.event.school.SchoolListEvent;
-import com.bit.schoolcomment.event.shop.HotShopListEvent;
-import com.bit.schoolcomment.event.shop.SearchShopListEvent;
+import com.bit.schoolcomment.event.SchoolListEvent;
+import com.bit.schoolcomment.event.ShopListEvent;
+import com.bit.schoolcomment.fragment.comment.GoodsCommentListFragment;
+import com.bit.schoolcomment.fragment.goods.GoodsCollectionListFragment;
+import com.bit.schoolcomment.fragment.goods.HotGoodsListFragment;
+import com.bit.schoolcomment.fragment.goods.SearchGoodsListFragment;
+import com.bit.schoolcomment.fragment.goods.ShopGoodsListFragment;
+import com.bit.schoolcomment.fragment.shop.HotShopListFragment;
+import com.bit.schoolcomment.fragment.shop.SearchShopListFragment;
 import com.bit.schoolcomment.model.UserModel;
 import com.bit.schoolcomment.model.list.CommentListModel;
 import com.bit.schoolcomment.model.list.GoodsListModel;
@@ -142,7 +145,7 @@ public class PullUtil {
             @Override
             public void getResult(String result) {
                 ShopListModel model = new Gson().fromJson(result, ShopListModel.class);
-                EventBus.getDefault().post(new SearchShopListEvent(model));
+                EventBus.getDefault().post(new ShopListEvent(model, SearchShopListFragment.class));
             }
         });
         request.doPost();
@@ -157,7 +160,7 @@ public class PullUtil {
             @Override
             public void getResult(String result) {
                 GoodsListModel model = new Gson().fromJson(result, GoodsListModel.class);
-                EventBus.getDefault().post(new SearchGoodsListEvent(model));
+                EventBus.getDefault().post(new GoodsListEvent(model, SearchGoodsListFragment.class));
             }
         });
         request.doPost();
@@ -184,7 +187,7 @@ public class PullUtil {
             @Override
             public void getResult(String result) {
                 ShopListModel model = new Gson().fromJson(result, ShopListModel.class);
-                EventBus.getDefault().post(new HotShopListEvent(model));
+                EventBus.getDefault().post(new ShopListEvent(model, HotShopListFragment.class));
             }
         });
         request.doPost();
@@ -198,7 +201,7 @@ public class PullUtil {
             @Override
             public void getResult(String result) {
                 GoodsListModel model = new Gson().fromJson(result, GoodsListModel.class);
-                EventBus.getDefault().post(new HotGoodsListEvent(model));
+                EventBus.getDefault().post(new GoodsListEvent(model, HotGoodsListFragment.class));
             }
         });
         request.doPost();
@@ -212,7 +215,7 @@ public class PullUtil {
             @Override
             public void getResult(String result) {
                 GoodsListModel model = new Gson().fromJson(result, GoodsListModel.class);
-                EventBus.getDefault().post(new ShopGoodsListEvent(model));
+                EventBus.getDefault().post(new GoodsListEvent(model, ShopGoodsListFragment.class));
             }
         });
         request.doPost();
@@ -226,7 +229,7 @@ public class PullUtil {
             @Override
             public void getResult(String result) {
                 CommentListModel model = new Gson().fromJson(result, CommentListModel.class);
-                EventBus.getDefault().post(new GoodsCommentListEvent(model));
+                EventBus.getDefault().post(new CommentListEvent(model, GoodsCommentListFragment.class));
             }
         });
         request.doPost();
@@ -240,7 +243,7 @@ public class PullUtil {
             @Override
             public void getResult(String result) {
                 GoodsListModel model = new Gson().fromJson(result, GoodsListModel.class);
-                EventBus.getDefault().post(new GoodsCollectionListEvent(model));
+                EventBus.getDefault().post(new GoodsListEvent(model, GoodsCollectionListFragment.class));
             }
         });
         request.doPost();

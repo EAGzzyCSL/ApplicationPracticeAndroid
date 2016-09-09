@@ -12,9 +12,13 @@ import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.activity.ShopActivity;
+import com.bit.schoolcomment.event.ShopListEvent;
 import com.bit.schoolcomment.fragment.BaseListFragment;
 import com.bit.schoolcomment.model.ShopModel;
 import com.facebook.drawee.view.SimpleDraweeView;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public abstract class ShopListFragment extends BaseListFragment<ShopModel> {
 
@@ -26,6 +30,11 @@ public abstract class ShopListFragment extends BaseListFragment<ShopModel> {
     @Override
     protected RecyclerView.Adapter getAdapter() {
         return new ShopListAdapter();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleShopList(ShopListEvent event) {
+        if (event.targetClass == getClass()) updateUI(event.shopListModel.data);
     }
 
     private class ShopListAdapter extends BaseListAdapter<ShopViewHolder>

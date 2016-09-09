@@ -9,7 +9,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
-import com.bit.schoolcomment.event.school.SchoolSelectEvent;
+import com.bit.schoolcomment.event.SchoolSelectEvent;
 import com.bit.schoolcomment.fragment.goods.SearchGoodsListFragment;
 import com.bit.schoolcomment.fragment.shop.SearchShopListFragment;
 import com.bit.schoolcomment.util.DataUtil;

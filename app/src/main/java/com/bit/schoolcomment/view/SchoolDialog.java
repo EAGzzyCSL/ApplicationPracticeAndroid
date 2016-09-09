@@ -9,7 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.bit.schoolcomment.R;
-import com.bit.schoolcomment.event.school.SchoolSelectEvent;
+import com.bit.schoolcomment.event.SchoolSelectEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

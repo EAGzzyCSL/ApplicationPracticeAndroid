@@ -12,9 +12,13 @@ import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.activity.GoodsActivity;
+import com.bit.schoolcomment.event.GoodsListEvent;
 import com.bit.schoolcomment.fragment.BaseListFragment;
 import com.bit.schoolcomment.model.GoodsModel;
 import com.facebook.drawee.view.SimpleDraweeView;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public abstract class GoodsListFragment extends BaseListFragment<GoodsModel> {
 
@@ -26,6 +30,11 @@ public abstract class GoodsListFragment extends BaseListFragment<GoodsModel> {
     @Override
     protected RecyclerView.Adapter getAdapter() {
         return new GoodsListAdapter();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleGoodsList(GoodsListEvent event) {
+        if (event.targetClass == getClass()) updateUI(event.goodsListModel.data);
     }
 
     protected class GoodsListAdapter extends BaseListAdapter<GoodsViewHolder>

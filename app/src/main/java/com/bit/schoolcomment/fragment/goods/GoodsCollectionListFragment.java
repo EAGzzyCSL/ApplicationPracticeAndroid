@@ -7,8 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bit.schoolcomment.R;
-import com.bit.schoolcomment.event.goods.GoodsCollectionEvent;
-import com.bit.schoolcomment.event.goods.GoodsCollectionListEvent;
+import com.bit.schoolcomment.event.GoodsCollectionEvent;
 import com.bit.schoolcomment.util.PullUtil;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -24,11 +23,6 @@ public class GoodsCollectionListFragment extends GoodsListFragment {
     @Override
     protected void pullNewData() {
         PullUtil.getInstance().getCollection();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void handleGoodsCollectionList(GoodsCollectionListEvent event) {
-        updateUI(event.goodsListModel.data);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

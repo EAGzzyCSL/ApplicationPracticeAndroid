@@ -1,4 +1,4 @@
-package com.bit.schoolcomment.event.school;
+package com.bit.schoolcomment.event;
 
 import com.bit.schoolcomment.model.SchoolModel;
 

@@ -1,4 +1,4 @@
-package com.bit.schoolcomment.event.goods;
+package com.bit.schoolcomment.event;
 
 public class GoodsCollectionEvent {
 

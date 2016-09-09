@@ -9,8 +9,12 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
+import com.bit.schoolcomment.event.CommentListEvent;
 import com.bit.schoolcomment.fragment.BaseListFragment;
 import com.bit.schoolcomment.model.CommentModel;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public abstract class CommentListFragment extends BaseListFragment<CommentModel> {
 
@@ -22,6 +26,11 @@ public abstract class CommentListFragment extends BaseListFragment<CommentModel>
     @Override
     protected RecyclerView.Adapter getAdapter() {
         return new CommentListAdapter();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleCommentList(CommentListEvent event) {
+        if (event.targetClass == getClass()) updateUI(event.commentListModel.data);
     }
 
     private class CommentListAdapter extends BaseListAdapter<CommentViewHolder>

@@ -1,7 +1,6 @@
 package com.bit.schoolcomment.fragment.goods;
 
-import com.bit.schoolcomment.event.goods.HotGoodsListEvent;
-import com.bit.schoolcomment.event.school.SchoolSelectEvent;
+import com.bit.schoolcomment.event.SchoolSelectEvent;
 import com.bit.schoolcomment.util.DataUtil;
 import com.bit.schoolcomment.util.PullUtil;
 
@@ -14,11 +13,6 @@ public class HotGoodsListFragment extends GoodsListFragment {
     protected void pullNewData() {
         int schoolId = DataUtil.getSchoolModel().ID;
         PullUtil.getInstance().getHotGoods(schoolId);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void handleHotGoodsList(HotGoodsListEvent event) {
-        updateUI(event.goodsListModel.data);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
-import com.bit.schoolcomment.event.school.SchoolListEvent;
-import com.bit.schoolcomment.event.school.SchoolSelectEvent;
+import com.bit.schoolcomment.event.SchoolListEvent;
+import com.bit.schoolcomment.event.SchoolSelectEvent;
 import com.bit.schoolcomment.fragment.BaseListFragment;
 import com.bit.schoolcomment.model.SchoolModel;
 import com.bit.schoolcomment.util.PreferenceUtil;

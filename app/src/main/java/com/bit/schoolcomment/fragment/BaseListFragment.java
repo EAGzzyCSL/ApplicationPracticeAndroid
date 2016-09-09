@@ -55,6 +55,10 @@ public abstract class BaseListFragment<M extends BaseModel> extends BaseFragment
         pullNewData();
     }
 
+    protected Class getClassName(){
+        return null;
+    }
+
     protected abstract RecyclerView.LayoutManager getLayoutManager();
 
     protected abstract RecyclerView.Adapter getAdapter();

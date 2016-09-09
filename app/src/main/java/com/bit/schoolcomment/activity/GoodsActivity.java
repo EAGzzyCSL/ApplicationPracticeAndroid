@@ -17,7 +17,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
-import com.bit.schoolcomment.event.goods.GoodsCollectionEvent;
+import com.bit.schoolcomment.event.GoodsCollectionEvent;
 import com.bit.schoolcomment.model.GoodsModel;
 import com.bit.schoolcomment.util.DataUtil;
 import com.bit.schoolcomment.util.DimensionUtil;
