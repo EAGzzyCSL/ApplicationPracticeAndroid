@@ -31,6 +31,7 @@ import java.lang.ref.WeakReference;
 
 public class GoodsActivity extends BaseActivity
         implements AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener, View.OnClickListener {
+
     public static final String EXTRA_goodsId = "goodsId";
     public static final String EXTRA_model = "model";
 
@@ -186,6 +187,7 @@ public class GoodsActivity extends BaseActivity
 
             for (int i = 0; i < 3; i++) {
                 mImageDv[i] = new SimpleDraweeView(GoodsActivity.this);
+                mImageDv[i].getHierarchy().setPlaceholderImage(R.drawable.ic_loading);
                 mImageDv[i].setImageURI("http://pic54.nipic.com/file/20141126/9422660_122829186000_2.jpg");
 
                 mRadioButton[i] = new RadioButton(GoodsActivity.this);

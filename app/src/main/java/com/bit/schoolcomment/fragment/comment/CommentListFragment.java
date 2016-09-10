@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -12,6 +13,8 @@ import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.event.CommentListEvent;
 import com.bit.schoolcomment.fragment.BaseListFragment;
 import com.bit.schoolcomment.model.CommentModel;
+import com.bit.schoolcomment.util.DimensionUtil;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -33,15 +36,15 @@ public abstract class CommentListFragment extends BaseListFragment<CommentModel>
         if (event.targetClass == getClass()) updateUI(event.commentListModel.data);
     }
 
-    private class CommentListAdapter extends BaseListAdapter<CommentViewHolder>
-            implements View.OnClickListener {
+    private class CommentListAdapter extends BaseListAdapter<CommentViewHolder> {
+
+        private final int WIDTH = DimensionUtil.Dp2Px(80);
+        private final int HEIGHT = DimensionUtil.Dp2Px(60);
 
         @Override
         public CommentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.item_comment, parent, false);
-            CommentViewHolder holder = new CommentViewHolder(view);
-            holder.itemView.setOnClickListener(this);
-            return holder;
+            return new CommentViewHolder(view);
         }
 
         @Override
@@ -50,25 +53,38 @@ public abstract class CommentListFragment extends BaseListFragment<CommentModel>
             holder.nameTv.setText(model.name);
             holder.rateRb.setRating(model.rate);
             holder.contentTv.setText(model.content);
-        }
+            holder.timeTv.setText(model.time);
 
-        @Override
-        public void onClick(View v) {
-
+            holder.imageLyt.removeAllViews();
+            for (int i = 0; i < 3; i++) {
+                holder.imageDv[i].setImageURI("http://pic54.nipic.com/file/20141126/9422660_122829186000_2.jpg");
+                holder.imageLyt.addView(holder.imageDv[i], new ViewGroup.LayoutParams(WIDTH, HEIGHT));
+            }
         }
     }
 
-    private static class CommentViewHolder extends RecyclerView.ViewHolder {
+    private class CommentViewHolder extends RecyclerView.ViewHolder {
 
         private TextView nameTv;
         private RatingBar rateRb;
         private TextView contentTv;
+        private TextView timeTv;
+        private LinearLayout imageLyt;
+        private SimpleDraweeView[] imageDv;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
             nameTv = (TextView) itemView.findViewById(R.id.item_comment_name);
             rateRb = (RatingBar) itemView.findViewById(R.id.item_comment_rate);
             contentTv = (TextView) itemView.findViewById(R.id.item_comment_content);
+            timeTv = (TextView) itemView.findViewById(R.id.item_comment_time);
+            imageLyt = (LinearLayout) itemView.findViewById(R.id.item_comment_image);
+
+            imageDv = new SimpleDraweeView[3];
+            for (int i = 0; i < 3; i++) {
+                imageDv[i] = new SimpleDraweeView(getContext());
+                imageDv[i].getHierarchy().setPlaceholderImage(R.drawable.ic_loading);
+            }
         }
     }
 }
