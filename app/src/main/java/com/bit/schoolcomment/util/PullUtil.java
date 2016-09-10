@@ -50,6 +50,7 @@ public class PullUtil {
     private static final String CANCEL_COLLECTION = BASE_URL + "delete_collection";
     private static final String GET_COMMENT = BASE_URL + "Get_allcomment";
     private static final String ADD_GOODS = BASE_URL + "Add_goods";
+    private static final String ADD_COMMENT = BASE_URL + "Add_comment";
 
     private static volatile PullUtil sPullUtil;
 
@@ -373,6 +374,29 @@ public class PullUtil {
             public void getResult(String result) {
                 if (isSuccessCode(result, 19)) {
                     PullUtil.getInstance().getShopGoods(shop_ID);
+                }
+            }
+        });
+        request.doPost();
+    }
+
+    public void addComment(
+            String content,
+            final int goods_ID,
+            float rate,
+            String images
+    ) {
+        PullRequest request = new PullRequest(ADD_COMMENT);
+        addIdAndToken(request);
+        request.setParams("content", content);
+        request.setParams("goods_ID", goods_ID);
+        request.setParams("rate", rate);
+        request.setParams("images", images);
+        request.setResponseListener(new ResponseListener() {
+            @Override
+            public void getResult(String result) {
+                if (isSuccessCode(result, 24)) {
+                    PullUtil.getInstance().getGoodsComment(goods_ID);
                 }
             }
         });

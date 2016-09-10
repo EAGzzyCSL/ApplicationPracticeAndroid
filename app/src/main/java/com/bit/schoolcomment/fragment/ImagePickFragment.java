@@ -23,6 +23,7 @@ import com.bit.schoolcomment.util.DimensionUtil;
 import com.bit.schoolcomment.util.PullUtil;
 import com.bit.schoolcomment.util.QiniuUtil;
 import com.bit.schoolcomment.util.ToastUtil;
+import com.google.gson.Gson;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UpProgressHandler;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ImagePickFragment extends Fragment {
+    private final String QiNiu_url = "http://ocsyd0pft.bkt.clouddn.com/";
     public static int REQUEST_code_pick_image = 333;
     // fragment init
     private int maxImage = 3;
@@ -158,7 +160,9 @@ public class ImagePickFragment extends Fragment {
     }
 
     public void imageUploadDone() {
-        onImageUploadDoneListener.onImageUploadDone(imageHash);
+        onImageUploadDoneListener.onImageUploadDone(
+                new Gson().toJson(imageHash)
+        );
     }
 
 
@@ -184,7 +188,7 @@ public class ImagePickFragment extends Fragment {
                                                 try {
                                                     String hash = response.getString("hash");
                                                     Log.i("图片hash:", hash);
-                                                    imageHash.add("http://ocsyd0pft.bkt.clouddn.com/" + hash);
+                                                    imageHash.add(QiNiu_url + hash);
                                                     if (imageHash.size() == imageList.size()) {
                                                         pgb_uploading_mask.setVisibility(View.INVISIBLE);
                                                         imageUploadDone();
@@ -232,7 +236,7 @@ public class ImagePickFragment extends Fragment {
     }
 
     public interface OnImageUploadDoneListener {
-        void onImageUploadDone(ArrayList<String> imageHash);
+        void onImageUploadDone(String imageJson);
     }
 
 }

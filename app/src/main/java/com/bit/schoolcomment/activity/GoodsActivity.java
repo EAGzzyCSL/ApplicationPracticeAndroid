@@ -165,6 +165,7 @@ public class GoodsActivity extends BaseActivity
         switch (v.getId()) {
             case R.id.goods_btn_add:
                 Intent intent = new Intent(this, AddCommentActivity.class);
+                intent.putExtra(EXTRA_goodsId, getIntent().getIntExtra(EXTRA_goodsId, 0));
                 startActivity(intent);
                 break;
         }

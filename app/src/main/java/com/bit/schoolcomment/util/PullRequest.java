@@ -35,6 +35,11 @@ public class PullRequest {
         map.put(key, String.valueOf(value));
     }
 
+    public void setParams(String key, float value) {
+        System.out.println(key + " : " + value);
+        map.put(key, String.valueOf(value));
+    }
+
 
     public void doPost() {
         StringRequest request = new StringRequest(Request.Method.POST, url,
