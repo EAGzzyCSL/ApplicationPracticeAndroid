@@ -140,10 +140,12 @@ public class PullUtil {
         request.doPost();
     }
 
-    public void searchShop(String keyword) {
+    public void searchShop(String keyword, int order, int schoolId) {
         PullRequest request = new PullRequest(SEARCH_SHOP);
         if (DataUtil.isLogin()) addIdAndToken(request);
         request.setParams("keyword", keyword);
+        request.setParams("order", String.valueOf(order));
+        request.setParams("school_ID", String.valueOf(schoolId));
         request.setResponseListener(new ResponseListener() {
 
             @Override
@@ -155,10 +157,13 @@ public class PullUtil {
         request.doPost();
     }
 
-    public void searchGoods(String keyword) {
+    public void searchGoods(String keyword, int order, int schoolId, int shopId) {
         PullRequest request = new PullRequest(SEARCH_GOODS);
         if (DataUtil.isLogin()) addIdAndToken(request);
         request.setParams("keyword", keyword);
+        request.setParams("order", String.valueOf(order));
+        request.setParams("school_ID", String.valueOf(schoolId));
+        if (shopId != 0) request.setParams("shop_ID", String.valueOf(shopId));
         request.setResponseListener(new ResponseListener() {
 
             @Override
