@@ -1,5 +1,6 @@
 package com.bit.schoolcomment.util;
 
+import com.qiniu.android.common.Zone;
 import com.qiniu.android.storage.Configuration;
 import com.qiniu.android.storage.UploadManager;
 
@@ -11,7 +12,12 @@ public class QiniuUtil {
         if (sUploadManager == null) {
             synchronized (QiniuUtil.class) {
                 if (sUploadManager == null) {
-                    sUploadManager = new UploadManager(new Configuration.Builder().build());
+                    sUploadManager = new UploadManager(
+                            new Configuration.
+                                    Builder().
+                                    zone(Zone.zone1).
+                                    build()
+                    );
                 }
             }
         }

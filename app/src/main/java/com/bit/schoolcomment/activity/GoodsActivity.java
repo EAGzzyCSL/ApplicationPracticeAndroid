@@ -235,7 +235,6 @@ public class GoodsActivity extends BaseActivity
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-
             if (msg.what == MSG_WHAT) {
                 int currentItem = mViewPager.getCurrentItem();
                 int nextItem = currentItem + 1;

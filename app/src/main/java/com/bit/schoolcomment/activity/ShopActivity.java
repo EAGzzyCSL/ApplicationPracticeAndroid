@@ -1,5 +1,6 @@
 package com.bit.schoolcomment.activity;
 
+import android.content.Intent;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.view.View;
@@ -11,12 +12,12 @@ import com.bit.schoolcomment.model.ShopModel;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 public class ShopActivity extends BaseActivity
-        implements AppBarLayout.OnOffsetChangedListener {
-
+        implements AppBarLayout.OnOffsetChangedListener, View.OnClickListener {
     public static final String EXTRA_shopId = "shopId";
     public static final String EXTRA_model = "model";
 
     private View mInfoView;
+    private ShopModel mShopModel;
 
     @Override
     protected boolean isEventBusOn() {
@@ -30,16 +31,16 @@ public class ShopActivity extends BaseActivity
 
     @Override
     protected void initView() {
-        ShopModel model = getIntent().getParcelableExtra(EXTRA_model);
-        assert model != null;
+        mShopModel = getIntent().getParcelableExtra(EXTRA_model);
+        assert mShopModel != null;
 
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.shop_appBarLayout);
         if (appBarLayout != null) appBarLayout.addOnOffsetChangedListener(this);
-        initToolbar(R.id.shop_toolbar, model.name);
+        initToolbar(R.id.shop_toolbar, mShopModel.name);
 
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout)
                 findViewById(R.id.shop_collapsingToolbarLayout);
-        if (collapsingToolbarLayout != null) collapsingToolbarLayout.setTitle(model.name);
+        if (collapsingToolbarLayout != null) collapsingToolbarLayout.setTitle(mShopModel.name);
 
         SimpleDraweeView imageDv = (SimpleDraweeView) findViewById(R.id.shop_image);
         if (imageDv != null)
@@ -47,11 +48,15 @@ public class ShopActivity extends BaseActivity
 
         mInfoView = findViewById(R.id.shop_info);
         TextView addressTv = (TextView) findViewById(R.id.shop_address);
-        if (addressTv != null) addressTv.setText(model.address);
+        if (addressTv != null) addressTv.setText(mShopModel.address);
         RatingBar rateRb = (RatingBar) findViewById(R.id.shop_rate);
         TextView rateTv = (TextView) findViewById(R.id.shop_rate_num);
-        if (rateRb != null) rateRb.setRating(model.rate);
-        if (rateTv != null) rateTv.setText(String.valueOf(model.rate));
+        if (rateRb != null) rateRb.setRating(mShopModel.rate);
+        if (rateTv != null) rateTv.setText(String.valueOf(mShopModel.rate));
+        View fab_add = findViewById(R.id.shop_btn_add);
+        if (fab_add != null) {
+            fab_add.setOnClickListener(this);
+        }
     }
 
     @Override
@@ -60,5 +65,18 @@ public class ShopActivity extends BaseActivity
         float current = 1 - Math.abs(verticalOffset) * fraction;
         mInfoView.setAlpha(current);
         mInfoView.setScaleY(current);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.shop_btn_add: {
+                Intent intent = new Intent(this, AddGoodsActivity.class);
+                intent.putExtra(AddGoodsActivity.EXTRA_shopId, mShopModel.ID);
+                intent.putExtra(AddGoodsActivity.EXTRA_shopName, mShopModel.name);
+                startActivity(intent);
+                break;
+            }
+        }
     }
 }

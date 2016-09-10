@@ -1,6 +1,7 @@
 package com.bit.schoolcomment.util;
 
 import com.bit.schoolcomment.event.CommentListEvent;
+import com.bit.schoolcomment.event.GetTokenEvent;
 import com.bit.schoolcomment.event.GoodsCollectionEvent;
 import com.bit.schoolcomment.event.GoodsListEvent;
 import com.bit.schoolcomment.event.LoginEvent;
@@ -46,6 +47,7 @@ public class PullUtil {
     private static final String JUDGE_COLLECTION = BASE_URL + "Judge_collection";
     private static final String ADD_COLLECTION = BASE_URL + "add_collection";
     private static final String CANCEL_COLLECTION = BASE_URL + "delete_collection";
+    private static final String GET_QINIU_TOKEN = BASE_URL + "get_qiniu_token";
 
     private static volatile PullUtil sPullUtil;
 
@@ -308,6 +310,21 @@ public class PullUtil {
                 if (isSuccessCode(result, 43)) {
                     EventBus.getDefault().post(new GoodsCollectionEvent(false));
                 }
+            }
+        });
+        request.doPost();
+    }
+
+    public void get_qiniu_token(final Class targetClass) {
+        String local = "http://192.168.56.1/inDev/ApplicationPracticeWeb/php/getToken.php";
+        String directUrl = "http://123.206.84.137/ApplicationPracticeWeb/php/getToken.php";
+        final PullRequest request =
+                new PullRequest(
+                        directUrl);
+        request.setResponseListener(new ResponseListener() {
+            @Override
+            public void getResult(String result) {
+                EventBus.getDefault().post(new GetTokenEvent(result, targetClass));
             }
         });
         request.doPost();
