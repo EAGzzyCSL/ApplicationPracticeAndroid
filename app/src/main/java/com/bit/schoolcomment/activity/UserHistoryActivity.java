@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.bit.schoolcomment.R;
+import com.bit.schoolcomment.fragment.comment.MyCommentListFragment;
 import com.bit.schoolcomment.fragment.goods.GoodsCollectionListFragment;
 import com.bit.schoolcomment.util.DataUtil;
 
@@ -42,7 +43,7 @@ public class UserHistoryActivity extends BaseActivity {
     private class PagerAdapter extends FragmentPagerAdapter {
 
         private final String[] TITLE = {getString(R.string.my_collection), getString(R.string.my_comment)};
-        private final Fragment[] FRAGMENTS = {new GoodsCollectionListFragment(), new GoodsCollectionListFragment()};
+        private final Fragment[] FRAGMENTS = {new GoodsCollectionListFragment(), new MyCommentListFragment()};
 
         public PagerAdapter(FragmentManager fm) {
             super(fm);

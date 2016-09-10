@@ -36,4 +36,8 @@
     <string name="all">全部</string>
     <string name="change_shop">切换商铺</string>
     <string name="find_new_goods">发现新菜品</string>
+    <string name="rate_descend">评分↓</string>
+    <string name="rate_ascend">评分↑</string>
+    <string name="price_ascend">价格↑</string>
+    <string name="price_descend">价格↓</string>
 </resources>
