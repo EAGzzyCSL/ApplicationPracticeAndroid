@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.model.ShopModel;
+import com.bit.schoolcomment.util.DataUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 public class ShopActivity extends BaseActivity
@@ -71,10 +72,15 @@ public class ShopActivity extends BaseActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.shop_btn_add: {
-                Intent intent = new Intent(this, AddGoodsActivity.class);
-                intent.putExtra(AddGoodsActivity.EXTRA_shopId, mShopModel.ID);
-                intent.putExtra(AddGoodsActivity.EXTRA_shopName, mShopModel.name);
-                startActivity(intent);
+                if (DataUtil.isLogin()) {
+                    Intent intent = new Intent(this, AddGoodsActivity.class);
+                    intent.putExtra(AddGoodsActivity.EXTRA_shopId, mShopModel.ID);
+                    intent.putExtra(AddGoodsActivity.EXTRA_shopName, mShopModel.name);
+                    intent.putExtra(AddGoodsActivity.EXTRA_schoolId, mShopModel.school_ID);
+                    startActivity(intent);
+                } else {
+                    LoginActivity.launch(this);
+                }
                 break;
             }
         }

@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.event.GetTokenEvent;
+import com.bit.schoolcomment.util.DimensionUtil;
 import com.bit.schoolcomment.util.PullUtil;
 import com.bit.schoolcomment.util.QiniuUtil;
 import com.bit.schoolcomment.util.ToastUtil;
@@ -38,12 +39,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ImagePickFragment extends Fragment {
-    private String qiniuToken = null;
-    private int maxImage = 3;
     public static int REQUEST_code_pick_image = 333;
+    // fragment init
+    private int maxImage = 3;
+    private OnImageUploadDoneListener onImageUploadDoneListener;
+    // 存放image的file和返回的hash
     private HashMap<ImageView, File> imageList = new HashMap<>(maxImage);
+    private ArrayList<String> imageHash = new ArrayList<>();
+    // token
+    private String qiniuToken = null;
+    // view部分
     private LinearLayout imageLinear;
     private ImageView currentClick = null;
+    private ProgressBar pgb_uploading;
+    private View pgb_uploading_mask;
     private View.OnClickListener onImageViewClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -58,11 +67,6 @@ public class ImagePickFragment extends Fragment {
                     chooserIntent, ImagePickFragment.REQUEST_code_pick_image);
         }
     };
-
-    private ArrayList<String> imageHash = new ArrayList<>();
-
-    private ProgressBar pgb_uploading;
-    private OnImageUploadDoneListener onImageUploadDoneListener;
 
 
     @Override
@@ -81,17 +85,36 @@ public class ImagePickFragment extends Fragment {
         imageLinear = (LinearLayout) v.findViewById(R.id.linear_imageContainer);
         pgb_uploading = (ProgressBar) v.findViewById(R.id.pgb_uploading);
         imageLinear.addView(getImageView());
+        pgb_uploading_mask = v.findViewById(R.id.pgb_uploading_mask);
         return v;
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    /**
+     * 初始化该fragment
+     *
+     * @param maxImage                  最多允许选择的image数量
+     * @param onImageUploadDoneListener 当image上传完成后的回调
+     */
+    public void init(int maxImage, OnImageUploadDoneListener onImageUploadDoneListener) {
+        this.maxImage = maxImage;
+        this.onImageUploadDoneListener = onImageUploadDoneListener;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
 
     private ImageView getImageView() {
         ImageView imageView = new ImageView(getActivity());
-        imageView.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
+        imageView.setLayoutParams(
+                new LinearLayout.LayoutParams(
+                        DimensionUtil.Dp2Px(100),
+                        DimensionUtil.Dp2Px(100)
+                )
+        );
         imageView.setImageResource(R.drawable.ic_add_photo);
         imageView.setOnClickListener(onImageViewClick);
         return imageView;
@@ -111,7 +134,6 @@ public class ImagePickFragment extends Fragment {
                 Uri uri = data.getData();
                 File imageFile = new File(getRealPathFromURI(uri));
                 imageList.put(currentClick, imageFile);
-                Log.i("QQQ", imageFile.toString());
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
                     if (currentClick != null) {
@@ -122,6 +144,76 @@ public class ImagePickFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+
+    public boolean check() {
+        if (imageList.isEmpty()) {
+            ToastUtil.show("未选择图片");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void imageUploadDone() {
+        onImageUploadDoneListener.onImageUploadDone(imageHash);
+    }
+
+
+    public void upload() {
+        if (qiniuToken == null) {
+            ToastUtil.show("token尚未获取");
+        } else {
+            pgb_uploading_mask.setVisibility(View.VISIBLE);
+            for (int i = 0; i < imageLinear.getChildCount(); i++) {
+                File f = imageList.get((ImageView) imageLinear.getChildAt(i));
+                if (f == null) {
+                    break;
+                }
+                QiniuUtil.
+                        getInstance().
+                        put(f, null,
+                                qiniuToken,
+                                new UpCompletionHandler() {
+                                    @Override
+                                    public void complete(String key, ResponseInfo info, JSONObject response) {
+                                        if (info.isOK()) {
+                                            if (response != null) {
+                                                try {
+                                                    String hash = response.getString("hash");
+                                                    Log.i("图片hash:", hash);
+                                                    imageHash.add("http://ocsyd0pft.bkt.clouddn.com/" + hash);
+                                                    if (imageHash.size() == imageList.size()) {
+                                                        pgb_uploading_mask.setVisibility(View.INVISIBLE);
+                                                        imageUploadDone();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        } else {
+                                            ToastUtil.show("上传图片失败");
+                                        }
+                                    }
+                                },
+                                new UploadOptions(
+                                        null, null, false,
+                                        new UpProgressHandler() {
+                                            public void progress(String key, double percent) {
+//                                                pgb_uploading.setProgress((int) (percent * 100));
+                                            }
+                                        },
+                                        null));
+            }
+        }
+    }
+
+    @Subscribe
+    public void handleOnTokenReceive(GetTokenEvent getTokenEvent) {
+        if (getTokenEvent.targetClass == getClass()) {
+            qiniuToken = getTokenEvent.token;
         }
     }
 
@@ -139,91 +231,8 @@ public class ImagePickFragment extends Fragment {
         return result;
     }
 
-    public void upload() {
-        if (qiniuToken == null) {
-            ToastUtil.show("token尚未获取");
-        } else {
-            for (int i = 0; i < imageLinear.getChildCount(); i++) {
-                File f = imageList.get((ImageView) imageLinear.getChildAt(i));
-                if (f == null) {
-                    break;
-                }
-                QiniuUtil.
-                        getInstance().
-                        put(f,
-                                null,
-                                qiniuToken,
-                                new UpCompletionHandler() {
-                                    @Override
-                                    public void complete(String key, ResponseInfo info, JSONObject response) {
-                                        if (info.isOK()) {
-                                            if (response != null) {
-                                                try {
-                                                    String hash = response.getString("hash");
-                                                    Log.i("图片hash:", hash);
-                                                    imageHash.add(hash);
-                                                    if (imageHash.size() == imageList.size()) {
-                                                        submitForm();
-                                                    }
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        } else {
-                                            ToastUtil.show("上传图片失败");
-                                        }
-                                    }
-                                },
-                                new UploadOptions(
-                                        null, null, false,
-                                        new UpProgressHandler() {
-                                            public void progress(String key, double percent) {
-                                                pgb_uploading.setProgress((int) (percent * 100));
-                                                Log.i("XXX", key + ": " + percent);
-                                            }
-                                        }, null));
-            }
-        }
-    }
-
-    public void submitForm() {
-        // 发送提交表单事件
-        onImageUploadDoneListener.onImageUploadDone(imageHash);
-    }
-
-    public ArrayList<String> getImageHash() {
-        return this.imageHash;
-    }
-
-    public boolean check() {
-        if (imageList.isEmpty()) {
-            ToastUtil.show("未选择图片");
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    @Subscribe
-    public void handleOnTokenReceive(GetTokenEvent getTokenEvent) {
-        if (getTokenEvent.targetClass == getClass()) {
-            qiniuToken = getTokenEvent.token;
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-
-    public void init(int maxImage, OnImageUploadDoneListener onImageUploadDoneListener) {
-        this.maxImage = maxImage;
-        this.onImageUploadDoneListener = onImageUploadDoneListener;
-    }
-
     public interface OnImageUploadDoneListener {
         void onImageUploadDone(ArrayList<String> imageHash);
     }
+
 }

@@ -30,6 +30,12 @@ public class PullRequest {
         map.put(key, value);
     }
 
+    public void setParams(String key, int value) {
+        System.out.println(key + " : " + value);
+        map.put(key, String.valueOf(value));
+    }
+
+
     public void doPost() {
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {

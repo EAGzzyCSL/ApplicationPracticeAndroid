@@ -49,6 +49,7 @@ public class PullUtil {
     private static final String ADD_COLLECTION = BASE_URL + "add_collection";
     private static final String CANCEL_COLLECTION = BASE_URL + "delete_collection";
     private static final String GET_COMMENT = BASE_URL + "Get_allcomment";
+    private static final String ADD_GOODS = BASE_URL + "Add_goods";
 
     private static volatile PullUtil sPullUtil;
 
@@ -327,12 +328,14 @@ public class PullUtil {
         final PullRequest request =
                 new PullRequest(
                         directUrl);
+        addIdAndToken(request);
         request.setResponseListener(new ResponseListener() {
             @Override
             public void getResult(String result) {
                 EventBus.getDefault().post(new GetTokenEvent(result, targetClass));
             }
         });
+        request.doPost();
     }
 
     public void getComment() {
@@ -344,6 +347,33 @@ public class PullUtil {
             public void getResult(String result) {
                 CommentListModel model = new Gson().fromJson(result, CommentListModel.class);
                 EventBus.getDefault().post(new CommentListEvent(model, MyCommentListFragment.class));
+            }
+        });
+        request.doPost();
+    }
+
+    public void addNewGoods(
+            String name,
+            String price,
+            final int shop_ID,
+            int school_ID,
+            String images
+    ) {
+        PullRequest request = new PullRequest(ADD_GOODS);
+        addIdAndToken(request);
+        request.setParams("name", name);
+        request.setParams("price", price);
+        request.setParams("shop_ID", shop_ID);
+        request.setParams("school_ID", school_ID);
+        //TODO 如果接口那边去了rate的话这儿也去rate
+        request.setParams("rate", 0);
+        request.setParams("images", images);
+        request.setResponseListener(new ResponseListener() {
+            @Override
+            public void getResult(String result) {
+                if (isSuccessCode(result, 19)) {
+                    PullUtil.getInstance().getShopGoods(shop_ID);
+                }
             }
         });
         request.doPost();

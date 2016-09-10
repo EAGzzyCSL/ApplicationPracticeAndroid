@@ -1,5 +1,6 @@
 package com.bit.schoolcomment.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.view.View;
@@ -18,6 +19,11 @@ public class LoginActivity extends BaseActivity
 
     private TextInputEditText mUserNameEt;
     private TextInputEditText mPasswordEt;
+
+    public static void launch(Context context) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected boolean isEventBusOn() {

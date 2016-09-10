@@ -11,6 +11,7 @@ public class ShopModel extends BaseModel
     public String address;
     public String image;
     public float rate;
+    public int school_ID;
 
     protected ShopModel(Parcel in) {
         ID = in.readInt();
@@ -18,6 +19,7 @@ public class ShopModel extends BaseModel
         address = in.readString();
         image = in.readString();
         rate = in.readFloat();
+        school_ID = in.readInt();
     }
 
     public static final Creator<ShopModel> CREATOR = new Creator<ShopModel>() {
@@ -45,5 +47,6 @@ public class ShopModel extends BaseModel
         dest.writeString(address);
         dest.writeString(image);
         dest.writeFloat(rate);
+        dest.writeInt(school_ID);
     }
 }
