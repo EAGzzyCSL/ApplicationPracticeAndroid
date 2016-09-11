@@ -1,31 +1,20 @@
 package com.bit.schoolcomment.activity;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
-import com.bit.schoolcomment.event.GetTokenEvent;
 import com.bit.schoolcomment.event.UserInfoEvent;
 import com.bit.schoolcomment.fragment.ImagePickFragment;
 import com.bit.schoolcomment.util.DataUtil;
 import com.bit.schoolcomment.util.PullUtil;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Calendar;
 
 public class UserInfoActivity extends BaseActivity
@@ -35,7 +24,6 @@ public class UserInfoActivity extends BaseActivity
     private static final int MALE = 1;
     private static final int FEMALE = 2;
 
-    private TextView nameTv;
     private RadioButton maleRb;
     private RadioButton femaleRb;
     private TextView birthTv;
@@ -57,7 +45,8 @@ public class UserInfoActivity extends BaseActivity
         PullUtil.getInstance().getUserInfo();
         initToolbar(R.id.user_info_toolbar, getString(R.string.personal_info));
 
-        nameTv = (TextView) findViewById(R.id.user_info_name);
+        TextView nameTv = (TextView) findViewById(R.id.user_info_name);
+        if (nameTv != null) nameTv.setText(DataUtil.getUserModel().name);
         maleRb = (RadioButton) findViewById(R.id.user_info_male);
         femaleRb = (RadioButton) findViewById(R.id.user_info_female);
         birthTv = (TextView) findViewById(R.id.user_info_birth);
@@ -105,7 +94,6 @@ public class UserInfoActivity extends BaseActivity
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleUserInfo(UserInfoEvent event) {
-        nameTv.setText(DataUtil.getUserModel().name);
         switch (event.userModel.sex) {
             case DEFAULT:
                 break;
