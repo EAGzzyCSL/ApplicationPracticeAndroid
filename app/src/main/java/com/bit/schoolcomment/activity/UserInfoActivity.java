@@ -68,17 +68,24 @@ public class UserInfoActivity extends BaseActivity
         if (saveBtn != null) saveBtn.setOnClickListener(this);
         fragment_avatar = (ImagePickFragment) getFragmentManager().findFragmentById(R.id.fragment_avatar);
         fragment_avatar.init(1, new ImagePickFragment.OnImageUploadDoneListener() {
-            @Override
-            public void onImageUploadDone(String imageJson) {
-                String avatarUrl = imageJson.substring(2, imageJson.length() - 2);
-                int sex = DEFAULT;
-                if (maleRb.isChecked()) sex = MALE;
-                else if (femaleRb.isChecked()) sex = FEMALE;
-                String birth = birthTv.getText().toString();
-                String dormitory = dormitoryTv.getText().toString();
-                PullUtil.getInstance().updateUserInfo(sex, birth, dormitory, avatarUrl);
-            }
-        }, R.layout.item_image_pick_fresco_round);
+                    @Override
+                    public void onImageUploadDone(String imageJson) {
+                        String avatarUrl;
+                        if (imageJson.length() > 2) {
+                            avatarUrl = imageJson.substring(2, imageJson.length() - 2);
+                        } else {
+                            avatarUrl = DataUtil.getUserModel().avatar;
+                        }
+                        int sex = DEFAULT;
+                        if (maleRb.isChecked()) sex = MALE;
+                        else if (femaleRb.isChecked()) sex = FEMALE;
+                        String birth = birthTv.getText().toString();
+                        String dormitory = dormitoryTv.getText().toString();
+                        PullUtil.getInstance().updateUserInfo(sex, birth, dormitory, avatarUrl);
+                    }
+                }, R.layout.item_image_pick_fresco_round,
+                DataUtil.getUserModel().avatar
+        );
     }
 
     @Override

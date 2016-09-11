@@ -49,6 +49,7 @@
                 <EditText
                     android:id="@+id/et_price"
                     style="@style/InputValue"
+                    android:inputType="numberDecimal"
                     android:hint="请填写价格" />
 
             </LinearLayout>

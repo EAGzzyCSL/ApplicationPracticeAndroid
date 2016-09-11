@@ -31,8 +31,8 @@ import com.google.gson.JsonParser;
 import org.greenrobot.eventbus.EventBus;
 
 public class PullUtil {
-
-    private static final String BASE_URL = "http://123.206.84.137/ApplicationPracticeWeb/php/receive.php?PostType=";
+    private static final String BASE_URL = "http://10.62.47.241/inDev/ApplicationPracticeWeb/php/receive.php?PostType=";
+    private static final String BASE_URL_2 = "http://123.206.84.137/ApplicationPracticeWeb/php/receive.php?PostType=";
     private static final String REGISTER = BASE_URL + "Register";
     private static final String LOGIN = BASE_URL + "Login";
     private static final String LOGOUT = BASE_URL + "logout";
@@ -176,7 +176,7 @@ public class PullUtil {
             @Override
             public void getResult(String result) {
                 if (isSuccessCode(result, 35)) {
-                    getUserInfo();
+                    checkToken(DataUtil.getUserModel().ID, DataUtil.getUserModel().token);
                 }
             }
         });
@@ -267,8 +267,10 @@ public class PullUtil {
 
             @Override
             public void getResult(String result) {
-                GoodsListModel model = new Gson().fromJson(result, GoodsListModel.class);
-                EventBus.getDefault().post(new GoodsListEvent(model, HotGoodsListFragment.class));
+                if (isSuccessCode(result, 9)) {
+                    GoodsListModel model = new Gson().fromJson(result, GoodsListModel.class);
+                    EventBus.getDefault().post(new GoodsListEvent(model, HotGoodsListFragment.class));
+                }
             }
         });
         request.doPost();
@@ -365,7 +367,6 @@ public class PullUtil {
     }
 
     public void get_qiniu_token(final Class targetClass) {
-        String local = "http://192.168.56.1/inDev/ApplicationPracticeWeb/php/getToken.php";
         String directUrl = "http://123.206.84.137/ApplicationPracticeWeb/php/getToken.php";
         final PullRequest request =
                 new PullRequest(

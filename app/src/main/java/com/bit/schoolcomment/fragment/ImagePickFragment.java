@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,7 +68,7 @@ public class ImagePickFragment extends Fragment {
                     chooserIntent, ImagePickFragment.REQUEST_code_pick_image);
         }
     };
-
+    private String defaultImgUri;
     // 是否在上传中
     private boolean inUploading = false;
 
@@ -104,6 +105,15 @@ public class ImagePickFragment extends Fragment {
         addImageView();
     }
 
+    public void init(int maxImage, OnImageUploadDoneListener onImageUploadDoneListener,
+                     int imageViewXml, String defaultImgUri) {
+        this.maxImage = maxImage;
+        this.onImageUploadDoneListener = onImageUploadDoneListener;
+        this.imageViewXml = imageViewXml;
+        this.defaultImgUri = defaultImgUri;
+        addImageView();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -114,6 +124,9 @@ public class ImagePickFragment extends Fragment {
     private SimpleDraweeView getImageView() {
         SimpleDraweeView simpleDraweeView = (SimpleDraweeView) LayoutInflater.
                 from(getActivity()).inflate(imageViewXml, imageLinear, false);
+        if (!TextUtils.isEmpty(defaultImgUri)) {
+            simpleDraweeView.setImageURI(defaultImgUri);
+        }
         simpleDraweeView.setOnClickListener(onImageViewClick);
         return simpleDraweeView;
     }

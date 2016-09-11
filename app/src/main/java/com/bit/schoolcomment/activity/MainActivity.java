@@ -2,6 +2,7 @@ package com.bit.schoolcomment.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,7 @@ import com.bit.schoolcomment.util.DataUtil;
 import com.bit.schoolcomment.util.DimensionUtil;
 import com.bit.schoolcomment.util.PreferenceUtil;
 import com.bit.schoolcomment.util.PullUtil;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,6 +41,7 @@ public class MainActivity extends BaseActivity
     private SlidingPaneLayout mSlidingPaneLayout;
     private TextView mNameTv;
     private TextView mSignTv;
+    private SimpleDraweeView mAvatarIv;
 
     @Override
     protected boolean isEventBusOn() {
@@ -65,6 +68,7 @@ public class MainActivity extends BaseActivity
             navHeader.findViewById(R.id.main_user_wrapper).setOnClickListener(this);
             mNameTv = (TextView) navHeader.findViewById(R.id.main_user_name);
             mSignTv = (TextView) navHeader.findViewById(R.id.main_user_sign);
+            mAvatarIv = (SimpleDraweeView) navHeader.findViewById(R.id.main_user_avatar);
             updateNavHeader();
         }
 
@@ -93,9 +97,13 @@ public class MainActivity extends BaseActivity
         if (DataUtil.isLogin()) {
             mNameTv.setText(DataUtil.getUserModel().name);
             mSignTv.setText(getString(R.string.edit_sign));
+            if (!DataUtil.getUserModel().avatar.equals("")) {
+                mAvatarIv.setImageURI(DataUtil.getUserModel().avatar);
+            }
         } else {
             mNameTv.setText(getString(R.string.please_login));
             mSignTv.setText(getString(R.string.login_discover_more));
+            mAvatarIv.setImageURI("");
         }
     }
 
