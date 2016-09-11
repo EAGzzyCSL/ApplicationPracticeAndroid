@@ -31,7 +31,7 @@ import com.google.gson.JsonParser;
 import org.greenrobot.eventbus.EventBus;
 
 public class PullUtil {
-    private static final String BASE_URL_DEBUG = "http://10.62.47.241/inDev/ApplicationPracticeWeb/php/receive.php?PostType=";
+    private static final String BASE_URL2 = "http://10.62.47.241/inDev/ApplicationPracticeWeb/php/receive.php?PostType=";
     private static final String BASE_URL = "http://123.206.84.137/ApplicationPracticeWeb/php/receive.php?PostType=";
     private static final String REGISTER = BASE_URL + "Register";
     private static final String LOGIN = BASE_URL + "Login";
@@ -408,8 +408,6 @@ public class PullUtil {
         request.setParams("price", price);
         request.setParams("shop_ID", shop_ID);
         request.setParams("school_ID", school_ID);
-        //TODO 如果接口那边去了rate的话这儿也去rate
-        request.setParams("rate", 0);
         request.setParams("images", images);
         request.setResponseListener(new ResponseListener() {
             @Override

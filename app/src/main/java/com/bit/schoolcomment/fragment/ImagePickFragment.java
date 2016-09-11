@@ -30,11 +30,13 @@ import com.qiniu.android.storage.UpCompletionHandler;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class ImagePickFragment extends Fragment {
@@ -162,9 +164,11 @@ public class ImagePickFragment extends Fragment {
     }
 
     public void imageUploadDone() {
+        String s = Arrays.toString(imageHash.toArray());
         onImageUploadDoneListener.onImageUploadDone(
-                new Gson().toJson(imageHash)
+                s.substring(1, s.length() - 1)
         );
+
     }
 
 

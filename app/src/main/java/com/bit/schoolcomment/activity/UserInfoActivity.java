@@ -61,7 +61,7 @@ public class UserInfoActivity extends BaseActivity
                     public void onImageUploadDone(String imageJson) {
                         String avatarUrl;
                         if (imageJson.length() > 2) {
-                            avatarUrl = imageJson.substring(2, imageJson.length() - 2);
+                            avatarUrl = imageJson;
                         } else {
                             avatarUrl = DataUtil.getUserModel().avatar;
                         }
