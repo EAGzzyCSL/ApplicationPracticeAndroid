@@ -119,8 +119,7 @@ public class GoodsActivity extends BaseActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (!DataUtil.isLogin()) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            LoginActivity.launch(this);
             return true;
         }
 

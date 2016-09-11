@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -33,6 +34,9 @@
             android:name=".activity.SearchActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.UserInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.UserHistoryActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -45,7 +49,9 @@
         <activity
             android:name=".activity.AddCommentActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.AddGoodsActivity"></activity>
+        <activity
+            android:name=".activity.AddGoodsActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

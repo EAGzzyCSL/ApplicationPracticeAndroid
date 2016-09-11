@@ -9,6 +9,7 @@ import com.bit.schoolcomment.event.LogoutEvent;
 import com.bit.schoolcomment.event.RegisterEvent;
 import com.bit.schoolcomment.event.SchoolListEvent;
 import com.bit.schoolcomment.event.ShopListEvent;
+import com.bit.schoolcomment.event.UserInfoEvent;
 import com.bit.schoolcomment.fragment.comment.GoodsCommentListFragment;
 import com.bit.schoolcomment.fragment.comment.MyCommentListFragment;
 import com.bit.schoolcomment.fragment.goods.GoodsCollectionListFragment;
@@ -36,6 +37,8 @@ public class PullUtil {
     private static final String LOGIN = BASE_URL + "Login";
     private static final String LOGOUT = BASE_URL + "logout";
     private static final String CHECK_TOKEN = BASE_URL + "Check_token";
+    private static final String GET_USER_INFO = BASE_URL + "Get_userinfor";
+    private static final String UPDATE_USER_INFO = BASE_URL + "Update_userinfor";
     private static final String SEARCH_SHOP = BASE_URL + "Shop_search";
     private static final String SEARCH_GOODS = BASE_URL + "Goods_search";
     private static final String GET_SCHOOL = BASE_URL + "Get_school";
@@ -138,6 +141,40 @@ public class PullUtil {
                 JsonObject jsonObject = new JsonParser().parse(result).getAsJsonObject();
                 UserModel model = new Gson().fromJson(jsonObject.get("data"), UserModel.class);
                 if (model != null) EventBus.getDefault().postSticky(new LoginEvent(model));
+            }
+        });
+        request.doPost();
+    }
+
+    public void getUserInfo() {
+        PullRequest request = new PullRequest(GET_USER_INFO);
+        addIdAndToken(request);
+        request.setResponseListener(new ResponseListener() {
+
+            @Override
+            public void getResult(String result) {
+                JsonObject jsonObject = new JsonParser().parse(result).getAsJsonObject();
+                UserModel model = new Gson().fromJson(jsonObject.get("data"), UserModel.class);
+                if (model != null) EventBus.getDefault().post(new UserInfoEvent(model));
+            }
+        });
+        request.doPost();
+    }
+
+    public void updateUserInfo(int sex, String birth, String dormitory) {
+        PullRequest request = new PullRequest(UPDATE_USER_INFO);
+        request.setParams("ID", DataUtil.getUserModel().ID);
+        request.setParams("name", DataUtil.getUserModel().name);
+        request.setParams("sex", String.valueOf(sex));
+        request.setParams("birth", birth);
+        request.setParams("native", dormitory);
+        request.setParams("tel", "");
+        request.setParams("email", "");
+        request.setResponseListener(new ResponseListener() {
+
+            @Override
+            public void getResult(String result) {
+                isSuccessCode(result, 35);
             }
         });
         request.doPost();

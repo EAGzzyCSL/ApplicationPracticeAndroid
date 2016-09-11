@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
+import com.bit.schoolcomment.dialog.SchoolDialog;
 import com.bit.schoolcomment.event.LoginEvent;
 import com.bit.schoolcomment.event.LogoutEvent;
 import com.bit.schoolcomment.event.SchoolSelectEvent;
@@ -26,7 +27,6 @@ import com.bit.schoolcomment.util.DataUtil;
 import com.bit.schoolcomment.util.DimensionUtil;
 import com.bit.schoolcomment.util.PreferenceUtil;
 import com.bit.schoolcomment.util.PullUtil;
-import com.bit.schoolcomment.dialog.SchoolDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -166,9 +166,11 @@ public class MainActivity extends BaseActivity
                 break;
 
             case R.id.main_user_wrapper:
-                if (!DataUtil.isLogin()) {
-                    Intent intent = new Intent(this, LoginActivity.class);
+                if (DataUtil.isLogin()) {
+                    Intent intent = new Intent(this, UserInfoActivity.class);
                     startActivity(intent);
+                } else {
+                    LoginActivity.launch(this);
                 }
                 break;
         }

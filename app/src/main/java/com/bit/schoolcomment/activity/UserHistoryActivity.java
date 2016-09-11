@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.fragment.comment.MyCommentListFragment;
 import com.bit.schoolcomment.fragment.goods.GoodsCollectionListFragment;
-import com.bit.schoolcomment.util.DataUtil;
 
 public class UserHistoryActivity extends BaseActivity {
 
@@ -28,7 +27,7 @@ public class UserHistoryActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        initToolbar(R.id.user_history_toolbar, DataUtil.getUserModel().name);
+        initToolbar(R.id.user_history_toolbar, getString(R.string.personal));
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.user_history_tabLayout);
         ViewPager viewPager = (ViewPager) findViewById(R.id.user_history_viewPager);
