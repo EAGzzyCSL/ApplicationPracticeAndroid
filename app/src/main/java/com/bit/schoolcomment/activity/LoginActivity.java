@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.event.LoginEvent;
+import com.bit.schoolcomment.util.MD5Util;
 import com.bit.schoolcomment.util.PreferenceUtil;
 import com.bit.schoolcomment.util.PullUtil;
 import com.bit.schoolcomment.util.ToastUtil;
@@ -55,6 +56,7 @@ public class LoginActivity extends BaseActivity
                 String msg = null;
                 if (username.isEmpty()) msg = getString(R.string.please_input_username);
                 else if (password.isEmpty()) msg = getString(R.string.please_input_password);
+                else password = MD5Util.string2MD5(password);
 
                 if (msg == null) PullUtil.getInstance().login(username, password);
                 else ToastUtil.show(msg);

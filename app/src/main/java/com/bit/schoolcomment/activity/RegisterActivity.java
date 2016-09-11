@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.bit.schoolcomment.R;
 import com.bit.schoolcomment.event.RegisterEvent;
+import com.bit.schoolcomment.util.MD5Util;
 import com.bit.schoolcomment.util.PullUtil;
 import com.bit.schoolcomment.util.ToastUtil;
 
@@ -54,6 +55,7 @@ public class RegisterActivity extends BaseActivity
                 else if (password.isEmpty()) msg = getString(R.string.please_input_password);
                 else if (password2.isEmpty()) msg = getString(R.string.please_input_password_again);
                 else if (!password.equals(password2)) msg = getString(R.string.not_same_password);
+                else password = MD5Util.string2MD5(password);
 
                 if (msg == null) PullUtil.getInstance().register(username, password);
                 else ToastUtil.show(msg);

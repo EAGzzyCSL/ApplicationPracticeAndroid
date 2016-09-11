@@ -197,7 +197,6 @@ public class MainActivity extends BaseActivity
     public void handleLogin(LoginEvent event) {
         EventBus.getDefault().removeStickyEvent(event);
         DataUtil.setUserModel(event.userModel);
-        updateNavHeader();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
