@@ -38,7 +38,7 @@ public class AddGoodsActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void initView() {
         initToolbar(R.id.add_goods_toolbar, getString(R.string.find_new_goods));
-        View v = findViewById(R.id.fab_done);
+        View v = findViewById(R.id.add_goods_button);
         if (v != null) {
             v.setOnClickListener(this);
         }
@@ -57,7 +57,7 @@ public class AddGoodsActivity extends BaseActivity implements View.OnClickListen
                                 images
                         );
                     }
-                }
+                }, R.layout.item_image_pick_fresco
         );
         et_dish = (EditText) findViewById(R.id.et_dish);
         et_prices = (EditText) findViewById(R.id.et_price);
@@ -66,7 +66,7 @@ public class AddGoodsActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fab_done: {
+            case R.id.add_goods_button: {
                 if (formCheck()) {
                     imagePickFragment.upload();
                     finish();

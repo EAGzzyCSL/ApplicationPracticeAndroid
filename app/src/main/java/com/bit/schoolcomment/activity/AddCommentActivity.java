@@ -32,7 +32,7 @@ public class AddCommentActivity extends BaseActivity
 
     @Override
     protected void initView() {
-        initToolbar(R.id.add_comment_toolbar, "test");
+        initToolbar(R.id.add_comment_toolbar, "添加新的评论");
         add_comment_button = (Button) findViewById(R.id.add_comment_button);
         fragment_imagePick = (ImagePickFragment) getFragmentManager().findFragmentById(R.id.fragment_imagePick);
         fragment_imagePick.init(3, new ImagePickFragment.OnImageUploadDoneListener() {
@@ -47,11 +47,12 @@ public class AddCommentActivity extends BaseActivity
                                 images
                         );
                     }
-                }
+                }, R.layout.item_image_pick_fresco
         );
         add_comment_button.setOnClickListener(this);
         et_content = (EditText) findViewById(R.id.et_content);
         rb_rate = (RatingBar) findViewById(R.id.rb_rate);
+
     }
 
     @Override
@@ -74,8 +75,7 @@ public class AddCommentActivity extends BaseActivity
             ToastUtil.show("请填写对这道菜的评星");
             return false;
         }
-
-        return fragment_imagePick.check();
+        return true;
     }
 
     private void submitComment() {

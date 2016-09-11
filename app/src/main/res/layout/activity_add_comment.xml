@@ -26,12 +26,12 @@
 
                 <TextView
                     style="@style/InputKey"
-                    android:text="姓名" />
+                    android:text="评论" />
 
                 <EditText
                     android:id="@+id/et_content"
                     style="@style/InputValue"
-                    android:hint="请填写姓名" />
+                    android:hint="请填写评论内容" />
 
             </LinearLayout>
 

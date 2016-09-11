@@ -1,19 +1,31 @@
 package com.bit.schoolcomment.activity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
+import com.bit.schoolcomment.event.GetTokenEvent;
 import com.bit.schoolcomment.event.UserInfoEvent;
+import com.bit.schoolcomment.fragment.ImagePickFragment;
 import com.bit.schoolcomment.util.DataUtil;
 import com.bit.schoolcomment.util.PullUtil;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 
 public class UserInfoActivity extends BaseActivity
@@ -28,6 +40,7 @@ public class UserInfoActivity extends BaseActivity
     private RadioButton femaleRb;
     private TextView birthTv;
     private TextView dormitoryTv;
+    private ImagePickFragment fragment_avatar;
 
     @Override
     protected boolean isEventBusOn() {
@@ -53,6 +66,19 @@ public class UserInfoActivity extends BaseActivity
 
         View saveBtn = findViewById(R.id.user_info_btn_save);
         if (saveBtn != null) saveBtn.setOnClickListener(this);
+        fragment_avatar = (ImagePickFragment) getFragmentManager().findFragmentById(R.id.fragment_avatar);
+        fragment_avatar.init(1, new ImagePickFragment.OnImageUploadDoneListener() {
+            @Override
+            public void onImageUploadDone(String imageJson) {
+                String avatarUrl = imageJson.substring(2, imageJson.length() - 2);
+                int sex = DEFAULT;
+                if (maleRb.isChecked()) sex = MALE;
+                else if (femaleRb.isChecked()) sex = FEMALE;
+                String birth = birthTv.getText().toString();
+                String dormitory = dormitoryTv.getText().toString();
+                PullUtil.getInstance().updateUserInfo(sex, birth, dormitory, avatarUrl);
+            }
+        }, R.layout.item_image_pick_fresco_round);
     }
 
     @Override
@@ -66,15 +92,11 @@ public class UserInfoActivity extends BaseActivity
                 break;
 
             case R.id.user_info_btn_save:
-                int sex = DEFAULT;
-                if (maleRb.isChecked()) sex = MALE;
-                else if (femaleRb.isChecked()) sex = FEMALE;
-                String birth = birthTv.getText().toString();
-                String dormitory = dormitoryTv.getText().toString();
-                PullUtil.getInstance().updateUserInfo(sex, birth, dormitory);
+                updateInfo();
                 break;
         }
     }
+
 
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -96,5 +118,11 @@ public class UserInfoActivity extends BaseActivity
         }
         if (event.userModel.birth != null) birthTv.setText(event.userModel.birth);
         if (event.userModel.dormitory != null) dormitoryTv.setText(event.userModel.dormitory);
+    }
+
+    private void updateInfo() {
+        // 表单验证
+        fragment_avatar.upload();
+        finish();
     }
 }

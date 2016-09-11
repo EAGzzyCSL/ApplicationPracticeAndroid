@@ -2,9 +2,9 @@ package com.bit.schoolcomment.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -23,11 +22,10 @@ import com.bit.schoolcomment.util.DimensionUtil;
 import com.bit.schoolcomment.util.PullUtil;
 import com.bit.schoolcomment.util.QiniuUtil;
 import com.bit.schoolcomment.util.ToastUtil;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
-import com.qiniu.android.storage.UpProgressHandler;
-import com.qiniu.android.storage.UploadOptions;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,7 +33,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -46,15 +43,16 @@ public class ImagePickFragment extends Fragment {
     private int maxImage = 3;
     private OnImageUploadDoneListener onImageUploadDoneListener;
     // 存放image的file和返回的hash
-    private HashMap<ImageView, File> imageList = new HashMap<>(maxImage);
+    private HashMap<SimpleDraweeView, File> imageList = new HashMap<>(maxImage);
     private ArrayList<String> imageHash = new ArrayList<>();
     // token
     private String qiniuToken = null;
     // view部分
     private LinearLayout imageLinear;
-    private ImageView currentClick = null;
+    private SimpleDraweeView currentClick = null;
     private ProgressBar pgb_uploading;
     private View pgb_uploading_mask;
+    private int imageViewXml;
     private View.OnClickListener onImageViewClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -64,11 +62,14 @@ public class ImagePickFragment extends Fragment {
             pickIntent.setType("image/*");
             Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
             chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
-            currentClick = (ImageView) v;
+            currentClick = (SimpleDraweeView) v;
             startActivityForResult(
                     chooserIntent, ImagePickFragment.REQUEST_code_pick_image);
         }
     };
+
+    // 是否在上传中
+    private boolean inUploading = false;
 
 
     @Override
@@ -86,7 +87,6 @@ public class ImagePickFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_pick_image, container, false);
         imageLinear = (LinearLayout) v.findViewById(R.id.linear_imageContainer);
         pgb_uploading = (ProgressBar) v.findViewById(R.id.pgb_uploading);
-        imageLinear.addView(getImageView());
         pgb_uploading_mask = v.findViewById(R.id.pgb_uploading_mask);
         return v;
     }
@@ -97,9 +97,11 @@ public class ImagePickFragment extends Fragment {
      * @param maxImage                  最多允许选择的image数量
      * @param onImageUploadDoneListener 当image上传完成后的回调
      */
-    public void init(int maxImage, OnImageUploadDoneListener onImageUploadDoneListener) {
+    public void init(int maxImage, OnImageUploadDoneListener onImageUploadDoneListener, int imageViewXml) {
         this.maxImage = maxImage;
         this.onImageUploadDoneListener = onImageUploadDoneListener;
+        this.imageViewXml = imageViewXml;
+        addImageView();
     }
 
     @Override
@@ -109,17 +111,11 @@ public class ImagePickFragment extends Fragment {
     }
 
 
-    private ImageView getImageView() {
-        ImageView imageView = new ImageView(getActivity());
-        imageView.setLayoutParams(
-                new LinearLayout.LayoutParams(
-                        DimensionUtil.Dp2Px(100),
-                        DimensionUtil.Dp2Px(100)
-                )
-        );
-        imageView.setImageResource(R.drawable.ic_add_photo);
-        imageView.setOnClickListener(onImageViewClick);
-        return imageView;
+    private SimpleDraweeView getImageView() {
+        SimpleDraweeView simpleDraweeView = (SimpleDraweeView) LayoutInflater.
+                from(getActivity()).inflate(imageViewXml, imageLinear, false);
+        simpleDraweeView.setOnClickListener(onImageViewClick);
+        return simpleDraweeView;
     }
 
     private void addImageView() {
@@ -134,17 +130,10 @@ public class ImagePickFragment extends Fragment {
         if (requestCode == REQUEST_code_pick_image && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 Uri uri = data.getData();
-                File imageFile = new File(getRealPathFromURI(uri));
+                File imageFile = new File(getRealPathFromURI(getActivity(), uri));
                 imageList.put(currentClick, imageFile);
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
-                    if (currentClick != null) {
-                        currentClick.setImageBitmap(bitmap);
-                    }
-                    addImageView();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                currentClick.setImageURI(uri);
+                addImageView();
             }
         }
     }
@@ -167,14 +156,21 @@ public class ImagePickFragment extends Fragment {
 
 
     public void upload() {
+        if (inUploading) {
+            return;
+        }
         if (qiniuToken == null) {
             ToastUtil.show("token尚未获取");
         } else {
-            pgb_uploading_mask.setVisibility(View.VISIBLE);
-            for (int i = 0; i < imageLinear.getChildCount(); i++) {
-                File f = imageList.get((ImageView) imageLinear.getChildAt(i));
+            inUploading = true;
+            int i = 0;
+            for (; i < imageLinear.getChildCount(); i++) {
+                File f = imageList.get((SimpleDraweeView) imageLinear.getChildAt(i));
                 if (f == null) {
                     break;
+                }
+                if (pgb_uploading_mask.getVisibility() == View.INVISIBLE) {
+                    pgb_uploading_mask.setVisibility(View.VISIBLE);
                 }
                 QiniuUtil.
                         getInstance().
@@ -201,15 +197,11 @@ public class ImagePickFragment extends Fragment {
                                             ToastUtil.show("上传图片失败");
                                         }
                                     }
-                                },
-                                new UploadOptions(
-                                        null, null, false,
-                                        new UpProgressHandler() {
-                                            public void progress(String key, double percent) {
-//                                                pgb_uploading.setProgress((int) (percent * 100));
-                                            }
-                                        },
-                                        null));
+                                }, null);
+            }
+            // 如果没有图片要上传的时候也调用done
+            if (i == 0) {
+                imageUploadDone();
             }
         }
     }
@@ -221,9 +213,9 @@ public class ImagePickFragment extends Fragment {
         }
     }
 
-    private String getRealPathFromURI(Uri contentURI) {
+    private String getRealPathFromURI(Context context, Uri contentURI) {
         String result;
-        Cursor cursor = getActivity().getContentResolver().query(contentURI, null, null, null, null);
+        Cursor cursor = context.getContentResolver().query(contentURI, null, null, null, null);
         if (cursor == null) {
             result = contentURI.getPath();
         } else {

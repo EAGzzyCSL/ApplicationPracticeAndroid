@@ -87,6 +87,9 @@ public class MainActivity extends BaseActivity
     }
 
     private void updateNavHeader() {
+        if (mNameTv == null || mSignTv == null) {
+            return;
+        }
         if (DataUtil.isLogin()) {
             mNameTv.setText(DataUtil.getUserModel().name);
             mSignTv.setText(getString(R.string.edit_sign));

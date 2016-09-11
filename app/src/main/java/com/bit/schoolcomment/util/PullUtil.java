@@ -161,7 +161,7 @@ public class PullUtil {
         request.doPost();
     }
 
-    public void updateUserInfo(int sex, String birth, String dormitory) {
+    public void updateUserInfo(int sex, String birth, String dormitory, String avatarUrl) {
         PullRequest request = new PullRequest(UPDATE_USER_INFO);
         request.setParams("ID", DataUtil.getUserModel().ID);
         request.setParams("name", DataUtil.getUserModel().name);
@@ -170,13 +170,17 @@ public class PullUtil {
         request.setParams("native", dormitory);
         request.setParams("tel", "");
         request.setParams("email", "");
+        request.setParams("avatar", avatarUrl);
         request.setResponseListener(new ResponseListener() {
 
             @Override
             public void getResult(String result) {
-                isSuccessCode(result, 35);
+                if (isSuccessCode(result, 35)) {
+                    getUserInfo();
+                }
             }
         });
+
         request.doPost();
     }
 
