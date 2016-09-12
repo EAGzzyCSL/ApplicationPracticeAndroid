@@ -37,9 +37,8 @@ public class AddCommentActivity extends BaseActivity
         fragment_imagePick = (ImagePickFragment) getFragmentManager().findFragmentById(R.id.fragment_imagePick);
         fragment_imagePick.init(3, new ImagePickFragment.OnImageUploadDoneListener() {
                     @Override
-                    public void onImageUploadDone(String imageJson) {
+                    public void onImageUploadDone(String images) {
                         int goods_id = getIntent().getIntExtra(GoodsActivity.EXTRA_goodsId, 0);
-                        String images = new Gson().toJson(imageJson);
                         PullUtil.getInstance().addComment(
                                 et_content.getText().toString(),
                                 goods_id,

@@ -164,9 +164,9 @@ public class ImagePickFragment extends Fragment {
     }
 
     public void imageUploadDone() {
-        String s = Arrays.toString(imageHash.toArray());
+        String s=TextUtils.join(",",imageHash.toArray());
         onImageUploadDoneListener.onImageUploadDone(
-                s.substring(1, s.length() - 1)
+                s
         );
 
     }

@@ -1,6 +1,7 @@
 package com.bit.schoolcomment.activity;
 
 import android.app.DatePickerDialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
@@ -58,12 +59,12 @@ public class UserInfoActivity extends BaseActivity
         fragment_avatar = (ImagePickFragment) getFragmentManager().findFragmentById(R.id.fragment_avatar);
         fragment_avatar.init(1, new ImagePickFragment.OnImageUploadDoneListener() {
                     @Override
-                    public void onImageUploadDone(String imageJson) {
+                    public void onImageUploadDone(String image) {
                         String avatarUrl;
-                        if (imageJson.length() > 2) {
-                            avatarUrl = imageJson;
-                        } else {
+                        if (TextUtils.isEmpty(image)) {
                             avatarUrl = DataUtil.getUserModel().avatar;
+                        } else {
+                            avatarUrl = image;
                         }
                         int sex = DEFAULT;
                         if (maleRb.isChecked()) sex = MALE;

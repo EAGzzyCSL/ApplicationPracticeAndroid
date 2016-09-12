@@ -45,10 +45,9 @@ public class AddGoodsActivity extends BaseActivity implements View.OnClickListen
         imagePickFragment = (ImagePickFragment) getFragmentManager().findFragmentById(R.id.fragment_goodsPick);
         imagePickFragment.init(3, new ImagePickFragment.OnImageUploadDoneListener() {
                     @Override
-                    public void onImageUploadDone(String imageJson) {
+                    public void onImageUploadDone(String images) {
                         int shopId = getIntent().getIntExtra(EXTRA_shopId, -1);
                         int schoolId = getIntent().getIntExtra(EXTRA_schoolId, -1);
-                        String images = new Gson().toJson(imageJson);
                         PullUtil.getInstance().addNewGoods(
                                 et_dish.getText().toString(),
                                 et_prices.getText().toString(),

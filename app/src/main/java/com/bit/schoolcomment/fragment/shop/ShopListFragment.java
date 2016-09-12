@@ -51,7 +51,7 @@ public abstract class ShopListFragment extends BaseListFragment<ShopModel> {
         public void onBindViewHolder(ShopViewHolder holder, int position) {
             holder.itemView.setLabelFor(position);
             ShopModel model = getModel(position);
-            holder.imageDv.setImageURI("http://i.k1982.com/design/up/200710/2007102763640374.jpg");
+            holder.imageDv.setImageURI(model.image);
             holder.nameTv.setText(model.name);
             holder.addressTv.setText(model.address);
             holder.rateRb.setRating(model.rate);

@@ -51,7 +51,9 @@ public abstract class GoodsListFragment extends BaseListFragment<GoodsModel> {
         public void onBindViewHolder(GoodsViewHolder holder, int position) {
             holder.itemView.setLabelFor(position);
             GoodsModel model = getModel(position);
-            holder.imageDv.setImageURI("http://pic54.nipic.com/file/20141126/9422660_122829186000_2.jpg");
+            if (model != null && model.images != null && model.images.size() > 0) {
+                holder.imageDv.setImageURI(model.images.get(0));
+            }
             holder.nameTv.setText(model.name);
             holder.priceTv.setText("￥" + model.price);
             holder.rateRb.setRating(model.rate);

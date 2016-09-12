@@ -46,6 +46,8 @@ public class GoodsActivity extends BaseActivity
     private SimpleDraweeView[] mImageDv;
     private RadioButton[] mRadioButton;
 
+    private GoodsModel mGoodsModel;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -70,23 +72,23 @@ public class GoodsActivity extends BaseActivity
 
     @Override
     protected void initView() {
-        GoodsModel model = getIntent().getParcelableExtra(EXTRA_model);
-        assert model != null;
-        if (DataUtil.isLogin()) PullUtil.getInstance().judgeCollection(model.ID);
+        mGoodsModel = getIntent().getParcelableExtra(EXTRA_model);
+        assert mGoodsModel != null;
+        if (DataUtil.isLogin()) PullUtil.getInstance().judgeCollection(mGoodsModel.ID);
 
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.goods_appBarLayout);
         if (appBarLayout != null) appBarLayout.addOnOffsetChangedListener(this);
-        initToolbar(R.id.goods_toolbar, model.name);
+        initToolbar(R.id.goods_toolbar, mGoodsModel.name);
 
         RatingBar rateRb = (RatingBar) findViewById(R.id.goods_rate);
         TextView rateTv = (TextView) findViewById(R.id.goods_rate_num);
-        if (rateRb != null) rateRb.setRating(model.rate);
-        if (rateTv != null) rateTv.setText(String.valueOf(model.rate));
+        if (rateRb != null) rateRb.setRating(mGoodsModel.rate);
+        if (rateTv != null) rateTv.setText(String.valueOf(mGoodsModel.rate));
 
         mTitleView = (Toolbar) findViewById(R.id.goods_toolbar2);
         if (mTitleView != null) {
-            mTitleView.setTitle(model.name);
-            mTitleView.setLabelFor(model.ID);
+            mTitleView.setTitle(mGoodsModel.name);
+            mTitleView.setLabelFor(mGoodsModel.ID);
             mTitleView.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
             mTitleView.setNavigationOnClickListener(new View.OnClickListener() {
 
@@ -163,17 +165,23 @@ public class GoodsActivity extends BaseActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.goods_btn_add:
-                Intent intent = new Intent(this, AddCommentActivity.class);
-                intent.putExtra(EXTRA_goodsId, getIntent().getIntExtra(EXTRA_goodsId, 0));
-                startActivity(intent);
+                if (DataUtil.isLogin()) {
+                    Intent intent = new Intent(this, AddCommentActivity.class);
+                    intent.putExtra(EXTRA_goodsId, getIntent().getIntExtra(EXTRA_goodsId, 0));
+                    startActivity(intent);
+                } else {
+                    LoginActivity.launch(this);
+                }
                 break;
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleGoodsCollection(GoodsCollectionEvent event) {
-        mCollectMenu.setVisible(!event.collected);
-        mCancelMenu.setVisible(event.collected);
+        if (mCancelMenu != null) {
+            mCollectMenu.setVisible(!event.collected);
+            mCancelMenu.setVisible(event.collected);
+        }
     }
 
     private class ImagePagerAdapter extends PagerAdapter {
@@ -181,14 +189,14 @@ public class GoodsActivity extends BaseActivity
         private final int DIMEN = DimensionUtil.Dp2Px(10);
 
         public ImagePagerAdapter() {
-            mImageDv = new SimpleDraweeView[3];
-            mRadioButton = new RadioButton[3];
+            mImageDv = new SimpleDraweeView[getCount()];
+            mRadioButton = new RadioButton[getCount()];
             RadioGroup radioGroup = (RadioGroup) findViewById(R.id.goods_radioGroup);
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < getCount(); i++) {
                 mImageDv[i] = new SimpleDraweeView(GoodsActivity.this);
                 mImageDv[i].getHierarchy().setPlaceholderImage(R.drawable.ic_loading);
-                mImageDv[i].setImageURI("http://pic54.nipic.com/file/20141126/9422660_122829186000_2.jpg");
+                mImageDv[i].setImageURI(mGoodsModel.images.get(i));
 
                 mRadioButton[i] = new RadioButton(GoodsActivity.this);
                 mRadioButton[i].setBackgroundResource(R.drawable.bg_banner_radio);
@@ -200,12 +208,14 @@ public class GoodsActivity extends BaseActivity
                     radioGroup.addView(mRadioButton[i], params);
                 }
             }
-            mRadioButton[0].setChecked(true);
+            if (mRadioButton.length > 0) {
+                mRadioButton[0].setChecked(true);
+            }
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return mGoodsModel.images == null ? 0 : mGoodsModel.images.size();
         }
 
         @Override

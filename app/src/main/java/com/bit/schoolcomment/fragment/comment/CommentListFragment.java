@@ -50,16 +50,17 @@ public abstract class CommentListFragment extends BaseListFragment<CommentModel>
         @Override
         public void onBindViewHolder(CommentViewHolder holder, int position) {
             CommentModel model = getModel(position);
-            holder.nameTv.setText(model.name);
+            holder.nameTv.setText(model.content);
             holder.rateRb.setRating(model.rate);
             holder.contentTv.setText(model.content);
             holder.timeTv.setText(model.time);
 
             holder.imageLyt.removeAllViews();
-            for (int i = 0; i < 3; i++) {
-                holder.imageDv[i].setImageURI("http://pic54.nipic.com/file/20141126/9422660_122829186000_2.jpg");
+            for (int i = 0; i < model.images.size(); i++) {
+                holder.imageDv[i].setImageURI(model.images.get(i));
                 holder.imageLyt.addView(holder.imageDv[i], new ViewGroup.LayoutParams(WIDTH, HEIGHT));
             }
+
         }
     }
 
