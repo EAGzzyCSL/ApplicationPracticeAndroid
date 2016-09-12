@@ -30,13 +30,29 @@
                 android:id="@+id/item_comment_name"
                 style="@style/ItemTitle" />
 
-            <RatingBar
-                android:id="@+id/item_comment_rate"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:stepSize="0.5" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RatingBar
+                    android:id="@+id/item_comment_rate"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:stepSize="0.5" />
+
+                <CheckBox
+                    android:id="@+id/item_comment_praise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="5dp"
+                    android:button="@drawable/bg_praise_checkbox"
+                    android:textColor="@color/primary"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/item_comment_content"

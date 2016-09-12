@@ -2,7 +2,6 @@ package com.bit.schoolcomment.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -110,8 +109,7 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         if (!DataUtil.isLogin()) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            LoginActivity.launch(this);
             return true;
         }
 

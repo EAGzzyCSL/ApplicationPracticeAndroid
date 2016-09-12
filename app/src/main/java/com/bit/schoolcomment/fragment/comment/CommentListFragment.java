@@ -5,15 +5,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bit.schoolcomment.R;
+import com.bit.schoolcomment.activity.LoginActivity;
 import com.bit.schoolcomment.event.CommentListEvent;
 import com.bit.schoolcomment.fragment.BaseListFragment;
 import com.bit.schoolcomment.model.CommentModel;
+import com.bit.schoolcomment.util.DataUtil;
 import com.bit.schoolcomment.util.DimensionUtil;
+import com.bit.schoolcomment.util.PullUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -36,7 +40,8 @@ public abstract class CommentListFragment extends BaseListFragment<CommentModel>
         if (event.targetClass == getClass()) updateUI(event.commentListModel.data);
     }
 
-    private class CommentListAdapter extends BaseListAdapter<CommentViewHolder> {
+    private class CommentListAdapter extends BaseListAdapter<CommentViewHolder>
+            implements View.OnClickListener {
 
         private final int WIDTH = DimensionUtil.Dp2Px(80);
         private final int HEIGHT = DimensionUtil.Dp2Px(60);
@@ -44,7 +49,9 @@ public abstract class CommentListFragment extends BaseListFragment<CommentModel>
         @Override
         public CommentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.item_comment, parent, false);
-            return new CommentViewHolder(view);
+            CommentViewHolder holder = new CommentViewHolder(view);
+            holder.praiseCb.setOnClickListener(this);
+            return holder;
         }
 
         @Override
@@ -54,6 +61,7 @@ public abstract class CommentListFragment extends BaseListFragment<CommentModel>
             holder.rateRb.setRating(model.rate);
             holder.contentTv.setText(model.content);
             holder.timeTv.setText(model.time);
+            holder.praiseCb.setLabelFor(model.ID);
 
             holder.imageLyt.removeAllViews();
             for (int i = 0; i < model.images.size(); i++) {
@@ -61,6 +69,19 @@ public abstract class CommentListFragment extends BaseListFragment<CommentModel>
                 holder.imageLyt.addView(holder.imageDv[i], new ViewGroup.LayoutParams(WIDTH, HEIGHT));
             }
 
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (!DataUtil.isLogin()) {
+                LoginActivity.launch(getContext());
+            } else {
+                CheckBox box = (CheckBox) v;
+                box.setChecked(!box.isChecked());
+                int commentId = v.getLabelFor();
+                if (box.isChecked()) PullUtil.getInstance().addPraise(commentId);
+                else PullUtil.getInstance().cancelPraise(commentId);
+            }
         }
     }
 
@@ -72,6 +93,7 @@ public abstract class CommentListFragment extends BaseListFragment<CommentModel>
         private TextView timeTv;
         private LinearLayout imageLyt;
         private SimpleDraweeView[] imageDv;
+        private CheckBox praiseCb;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
@@ -80,6 +102,7 @@ public abstract class CommentListFragment extends BaseListFragment<CommentModel>
             contentTv = (TextView) itemView.findViewById(R.id.item_comment_content);
             timeTv = (TextView) itemView.findViewById(R.id.item_comment_time);
             imageLyt = (LinearLayout) itemView.findViewById(R.id.item_comment_image);
+            praiseCb = (CheckBox) itemView.findViewById(R.id.item_comment_praise);
 
             imageDv = new SimpleDraweeView[3];
             for (int i = 0; i < 3; i++) {

@@ -47,6 +47,8 @@ public class PullUtil {
     private static final String GET_HOT_GOODS = BASE_URL + "Get_hotgoods";
     private static final String GET_SHOP_GOODS = BASE_URL + "Get_shopgoods";
     private static final String GET_GOODS_COMMENT = BASE_URL + "Get_goodscomment";
+    private static final String ADD_PRAISE = BASE_URL + "praise";
+    private static final String CANCEL_PRAISE = BASE_URL + "delete_praise";
     private static final String GET_COLLECTION = BASE_URL + "Get_collection";
     private static final String JUDGE_COLLECTION = BASE_URL + "Judge_collection";
     private static final String ADD_COLLECTION = BASE_URL + "add_collection";
@@ -180,7 +182,6 @@ public class PullUtil {
                 }
             }
         });
-
         request.doPost();
     }
 
@@ -267,10 +268,8 @@ public class PullUtil {
 
             @Override
             public void getResult(String result) {
-                if (isSuccessCode(result, 9)) {
-                    GoodsListModel model = new Gson().fromJson(result, GoodsListModel.class);
-                    EventBus.getDefault().post(new GoodsListEvent(model, HotGoodsListFragment.class));
-                }
+                GoodsListModel model = new Gson().fromJson(result, GoodsListModel.class);
+                EventBus.getDefault().post(new GoodsListEvent(model, HotGoodsListFragment.class));
             }
         });
         request.doPost();
@@ -292,6 +291,7 @@ public class PullUtil {
 
     public void getGoodsComment(int goodsId) {
         PullRequest request = new PullRequest(GET_GOODS_COMMENT);
+        addIdAndToken(request);
         request.setParams("goods_ID", String.valueOf(goodsId));
         request.setResponseListener(new ResponseListener() {
 
@@ -301,6 +301,20 @@ public class PullUtil {
                 EventBus.getDefault().post(new CommentListEvent(model, GoodsCommentListFragment.class));
             }
         });
+        request.doPost();
+    }
+
+    public void addPraise(int commentId) {
+        PullRequest request = new PullRequest(ADD_PRAISE);
+        addIdAndToken(request);
+        request.setParams("comment_ID", String.valueOf(commentId));
+        request.doPost();
+    }
+
+    public void cancelPraise(int commentId) {
+        PullRequest request = new PullRequest(CANCEL_PRAISE);
+        addIdAndToken(request);
+        request.setParams("comment_ID", String.valueOf(commentId));
         request.doPost();
     }
 

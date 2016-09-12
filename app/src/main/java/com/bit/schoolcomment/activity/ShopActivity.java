@@ -44,8 +44,7 @@ public class ShopActivity extends BaseActivity
         if (collapsingToolbarLayout != null) collapsingToolbarLayout.setTitle(mShopModel.name);
 
         SimpleDraweeView imageDv = (SimpleDraweeView) findViewById(R.id.shop_image);
-        if (imageDv != null)
-            imageDv.setImageURI("http://i.k1982.com/design/up/200710/2007102763640374.jpg");
+        if (imageDv != null) imageDv.setImageURI(mShopModel.image);
 
         mInfoView = findViewById(R.id.shop_info);
         TextView addressTv = (TextView) findViewById(R.id.shop_address);

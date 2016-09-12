@@ -120,18 +120,21 @@ public class GoodsActivity extends BaseActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (!DataUtil.isLogin()) {
-            LoginActivity.launch(this);
-            return true;
-        }
-
         int goodsId = mTitleView.getLabelFor();
         switch (item.getItemId()) {
             case R.id.menu_goods_collect:
+                if (!DataUtil.isLogin()) {
+                    LoginActivity.launch(this);
+                    return true;
+                }
                 PullUtil.getInstance().addCollection(goodsId);
                 break;
 
             case R.id.menu_goods_cancel:
+                if (!DataUtil.isLogin()) {
+                    LoginActivity.launch(this);
+                    return true;
+                }
                 PullUtil.getInstance().cancelCollection(goodsId);
                 break;
         }
