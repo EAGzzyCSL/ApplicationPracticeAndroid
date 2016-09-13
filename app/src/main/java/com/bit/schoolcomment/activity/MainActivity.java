@@ -86,7 +86,10 @@ public class MainActivity extends BaseActivity
         }
 
         View schoolBtn = findViewById(R.id.main_btn_school);
-        if (schoolBtn != null) schoolBtn.setOnClickListener(this);
+        if (schoolBtn != null) {
+            schoolBtn.setOnClickListener(this);
+            if (!PreferenceUtil.contains("schoolId")) schoolBtn.callOnClick();
+        }
     }
 
     private void updateNavHeader() {

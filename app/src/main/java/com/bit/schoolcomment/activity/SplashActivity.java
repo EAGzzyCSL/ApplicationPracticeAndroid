@@ -50,8 +50,8 @@ public class SplashActivity extends BaseActivity {
         }
 
         SchoolModel model = new SchoolModel(
-                PreferenceUtil.getInt("schoolId", 1),
-                PreferenceUtil.getString("schoolName", "北京理工大学（中关村）")
+                PreferenceUtil.getInt("schoolId", -1),
+                PreferenceUtil.getString("schoolName", getString(R.string.please_select_school))
         );
         DataUtil.setSchoolModel(model);
 

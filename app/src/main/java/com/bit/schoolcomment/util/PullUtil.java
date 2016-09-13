@@ -291,7 +291,7 @@ public class PullUtil {
 
     public void getGoodsComment(int goodsId) {
         PullRequest request = new PullRequest(GET_GOODS_COMMENT);
-        addIdAndToken(request);
+        if (DataUtil.isLogin()) addIdAndToken(request);
         request.setParams("goods_ID", String.valueOf(goodsId));
         request.setResponseListener(new ResponseListener() {
 
@@ -308,6 +308,13 @@ public class PullUtil {
         PullRequest request = new PullRequest(ADD_PRAISE);
         addIdAndToken(request);
         request.setParams("comment_ID", String.valueOf(commentId));
+        request.setResponseListener(new ResponseListener() {
+
+            @Override
+            public void getResult(String result) {
+
+            }
+        });
         request.doPost();
     }
 
@@ -315,6 +322,13 @@ public class PullUtil {
         PullRequest request = new PullRequest(CANCEL_PRAISE);
         addIdAndToken(request);
         request.setParams("comment_ID", String.valueOf(commentId));
+        request.setResponseListener(new ResponseListener() {
+
+            @Override
+            public void getResult(String result) {
+
+            }
+        });
         request.doPost();
     }
 

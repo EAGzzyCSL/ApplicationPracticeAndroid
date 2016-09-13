@@ -57,10 +57,13 @@ public abstract class CommentListFragment extends BaseListFragment<CommentModel>
         @Override
         public void onBindViewHolder(CommentViewHolder holder, int position) {
             CommentModel model = getModel(position);
-            holder.nameTv.setText(model.content);
+            holder.avatarDv.setImageURI(model.avatar);
+            holder.nameTv.setText(model.name);
             holder.rateRb.setRating(model.rate);
             holder.contentTv.setText(model.content);
             holder.timeTv.setText(model.time);
+            holder.praiseCb.setText(String.valueOf(model.like_num));
+            holder.praiseCb.setChecked(model.ispraised == 1);
             holder.praiseCb.setLabelFor(model.ID);
 
             holder.imageLyt.removeAllViews();
@@ -76,17 +79,23 @@ public abstract class CommentListFragment extends BaseListFragment<CommentModel>
             if (!DataUtil.isLogin()) {
                 LoginActivity.launch(getContext());
             } else {
-                CheckBox box = (CheckBox) v;
-                box.setChecked(!box.isChecked());
+                CheckBox box = ((CheckBox) v);
+                int praiseNum = Integer.parseInt(box.getText().toString());
                 int commentId = v.getLabelFor();
-                if (box.isChecked()) PullUtil.getInstance().addPraise(commentId);
-                else PullUtil.getInstance().cancelPraise(commentId);
+                if (box.isChecked()) {
+                    box.setText(String.valueOf(praiseNum + 1));
+                    PullUtil.getInstance().addPraise(commentId);
+                } else {
+                    box.setText(String.valueOf(praiseNum - 1));
+                    PullUtil.getInstance().cancelPraise(commentId);
+                }
             }
         }
     }
 
     private class CommentViewHolder extends RecyclerView.ViewHolder {
 
+        private SimpleDraweeView avatarDv;
         private TextView nameTv;
         private RatingBar rateRb;
         private TextView contentTv;
@@ -97,6 +106,7 @@ public abstract class CommentListFragment extends BaseListFragment<CommentModel>
 
         public CommentViewHolder(View itemView) {
             super(itemView);
+            avatarDv = (SimpleDraweeView) itemView.findViewById(R.id.item_comment_avatar);
             nameTv = (TextView) itemView.findViewById(R.id.item_comment_name);
             rateRb = (RatingBar) itemView.findViewById(R.id.item_comment_rate);
             contentTv = (TextView) itemView.findViewById(R.id.item_comment_content);
